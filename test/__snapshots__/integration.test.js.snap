@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`integration should compile basic 1`] = `
+"import _rawact_createElement from \\"babel-plugin-rawact/lib/runtime/createElement\\";
+import _rawact_renderInternal from \\"babel-plugin-rawact/lib/runtime/renderInternal\\";
+import _rawact_unmountInternal from \\"babel-plugin-rawact/lib/runtime/unmountInternal\\";
+import _rawact_renderChildren from \\"babel-plugin-rawact/lib/runtime/renderChildren\\";
+import _rawact_hooks from \\"babel-plugin-rawact/lib/runtime/hooks\\";
+const _instructions = {};
+const _instructions2 = {};
+import * as React from \\"babel-plugin-rawact/lib/runtime/react\\";
+
+const Hello = ({
+  name
+}) => (() => {
+  const _child = name;
+  return _context => {
+    if (_context._ !== _instructions) {
+      if (_context.$) _context.$();
+
+      _context.$ = () => {
+        _rawact_unmountInternal(_context.b_);
+      };
+
+      _context._ = _instructions;
+      _context.a = _rawact_createElement(\\"p\\");
+
+      _rawact_renderInternal(_context, _child, \\"b\\", 1);
+
+      _rawact_renderChildren(_context.a, [\\"Hello \\", _context[\\"b\\"], \\"!\\"]);
+    } else {
+      _rawact_renderInternal(_context, _child, \\"b\\", 0);
+    }
+
+    return _context.a;
+  };
+})();
+
+export default (() => {
+  const _child2 = _rawact_hooks(Hello, {
+    name: \\"World\\"
+  });
+
+  return _context2 => {
+    if (_context2._ !== _instructions2) {
+      if (_context2.$) _context2.$();
+
+      _context2.$ = () => {
+        _rawact_unmountInternal(_context2.b_);
+      };
+
+      _context2._ = _instructions2;
+      _context2.a = _rawact_createElement(\\"div\\");
+      _context2.a.title = \\"hello\\";
+
+      _rawact_renderInternal(_context2, _child2, \\"b\\", 1);
+
+      _rawact_renderChildren(_context2.a, [_context2[\\"b\\"], \\"!!\\"]);
+    } else {
+      _rawact_renderInternal(_context2, _child2, \\"b\\", 0);
+    }
+
+    return _context2.a;
+  };
+});"
+`;

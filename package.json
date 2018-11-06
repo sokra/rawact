@@ -1,0 +1,25 @@
+{
+  "name": "babel-plugin-rawact",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/sokra/rawact",
+  "author": "Tobias Koppers <tobias.koppers@googlemail.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "prepublishOnly": "rimraf lib && babel src -d lib",
+    "start": "rimraf lib && babel src -d lib -w",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/helper-plugin-utils": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "jest": "^23.6.0",
+    "rimraf": "^2.6.2"
+  }
+}
