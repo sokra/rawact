@@ -1,6 +1,6 @@
 # babel-plugin-rawact
 
-A babel plugin with compiles React.js components into native DOM instructions to eliminate the need for the react library at runtime.
+A babel plugin which compiles React.js components into native DOM instructions to eliminate the need for the react library at runtime.
 
 ## Motivation
 
