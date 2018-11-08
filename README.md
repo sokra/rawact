@@ -41,7 +41,7 @@ Make sure that transpile all modules that contains imports to `react` or `react-
 
 ## Demo application
 
-App: [https://sokra.github.io/todo-mvc-react-hooks-experiments](https://sokra.github.io/todo-mvc-react-hooks-experiments)
+App: [https://sokra.github.io/todo-mvc-react-hooks-experiments/index.html](https://sokra.github.io/todo-mvc-react-hooks-experiments/index.html)
 
 Repo: [https://github.com/sokra/todo-mvc-react-hooks-experiments](https://github.com/sokra/todo-mvc-react-hooks-experiments)
 
