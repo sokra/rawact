@@ -556,3 +556,25 @@ export default ({ test: a }) => c => (
 	c.a
 )
 ```
+
+For comparison the component without rawact minimized:
+
+```js
+export default ({ test: t }) => a("div", { className: t });
+```
+
+## Size of minimal example
+
+```js
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+
+const Counter = ({ step }) => {
+	const [counter, setCounter] = useState(0);
+	return <button onClick={() => setCounter(counter + step)}>{counter}</button>;
+};
+
+ReactDOM.render(<Counter step={1} />, document.getElementById("root"));
+```
+
+produces a bundle with 3.21 KiB compared to 115 KiB with react and react-dom.
