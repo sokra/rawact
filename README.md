@@ -51,6 +51,12 @@ with rawact: 18.3 KiB
 
 with react: 126 KiB
 
+### Demo 2
+
+There is also a demo in the `app/` folder. Install dependencies in root and `app`. Run `yarn build`. Open `index.html`.
+
+There is a performance example which is able to render 10000 non-pure elements a couple of times faster than React.js.
+
 ## How does it work?
 
 1. It replaces all imports to `react` and `react-dom` with rawacts own runtime (that's much smaller).
@@ -143,6 +149,8 @@ export default ({ test }) => {
 ```
 
 Note: Some attributes generate different code. I. e. `onClick` generates code that adds event handlers.
+
+Note: With the compile step, the update path only has to check dynamic attributes. While React.js itself can't differ between static and dynamic attributes and has to compare all of them.
 
 #### Children
 
