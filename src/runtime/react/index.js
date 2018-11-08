@@ -9,7 +9,7 @@ export { default as createContext } from "./createContext";
 export { default as findDOMNode } from "./findDOMNode";
 export { default as Component } from "./Component";
 // TODO
-export { default as PureComponent } from "./Component";
+export { default as PureComponent } from "./PureComponent";
 export { default as memo } from "./memo";
 export { default as Fragment } from "./Fragment";
 export { default as Children } from "./Children";

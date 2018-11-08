@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 
 export default () => {
 	const [text, setText] = useState("Hello World");
@@ -36,19 +36,20 @@ export default () => {
 const Recurse = ({ text, count, index }) => {
 	if (count <= 1)
 		return (
-			<span>
+			<Fragment>
+				{" "}
 				{text}
 				{index}{" "}
-			</span>
+			</Fragment>
 		);
 	return (
-		<span>
+		<Fragment>
 			<Recurse text={text} count={Math.floor(count / 2)} index={index} />
 			<Recurse
 				text={text}
 				count={Math.ceil(count / 2)}
 				index={index + Math.floor(count / 2)}
 			/>
-		</span>
+		</Fragment>
 	);
 };

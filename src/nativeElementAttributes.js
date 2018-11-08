@@ -124,10 +124,18 @@ export default (
 					[param],
 					t.logicalExpression(
 						"&&",
-						t.binaryExpression(
-							"===",
-							t.memberExpression(node, t.identifier("type")),
-							t.stringLiteral("text")
+						t.logicalExpression(
+							"||",
+							t.binaryExpression(
+								"===",
+								t.memberExpression(node, t.identifier("type")),
+								t.stringLiteral("text")
+							),
+							t.binaryExpression(
+								"===",
+								t.memberExpression(node, t.identifier("type")),
+								t.stringLiteral("number")
+							)
 						),
 						t.callExpression(local, [param])
 					)

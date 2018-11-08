@@ -1,10 +1,16 @@
 import createText from "./createText";
 import toText from "./toText";
 
-export default (parentNode, children) => {
+const renderChildren = (parentNode, children) => {
 	for (const child of children) {
-		parentNode.appendChild(
-			typeof child === "string" ? createText(toText(child)) : child
-		);
+		if (Array.isArray(child)) {
+			renderChildren(parentNode, child);
+		} else {
+			parentNode.appendChild(
+				typeof child === "string" ? createText(toText(child)) : child
+			);
+		}
 	}
 };
+
+export { renderChildren as default };

@@ -106,12 +106,7 @@ const createNativeElement = (element, scope) => {
 	let children = element.children;
 
 	if (element.kind === "Fragment") {
-		const createFragment = scope.importHelper("createFragment");
-		createStatements.push(
-			t.expressionStatement(
-				t.assignmentExpression("=", node, t.callExpression(createFragment, []))
-			)
-		);
+		// do not create a node, a fragment will be created in the children handler
 	} else if (element.kind === "html") {
 		const createElement = scope.importHelper("createElement");
 		createStatements.push(
@@ -163,11 +158,12 @@ const createNativeElement = (element, scope) => {
 		throw new Error(`Unsupported element kind ${element.kind}`);
 	}
 
-	if (children.length > 0) {
+	if (children.length > 0 || element.kind === "Fragment") {
 		const childrenCreate = [];
 		for (const child of children) {
 			if (t.isStringLiteral(child)) {
 				childrenCreate.push(child);
+
 				continue;
 			}
 			if (
@@ -214,6 +210,21 @@ const createNativeElement = (element, scope) => {
 					])
 				)
 			);
+			if (element.kind === "Fragment") {
+				updateStatements.push(
+					t.expressionStatement(
+						t.assignmentExpression(
+							"=",
+							t.memberExpression(
+								node,
+								t.numericLiteral(childrenCreate.length),
+								true
+							),
+							t.memberExpression(scope.context(), childNode, true)
+						)
+					)
+				);
+			}
 			unmountStatements.push(
 				t.expressionStatement(
 					t.callExpression(scope.importHelper("unmountInternal"), [
@@ -226,14 +237,29 @@ const createNativeElement = (element, scope) => {
 			);
 			childrenCreate.push(t.memberExpression(scope.context(), childNode, true));
 		}
-		createStatements.push(
-			t.expressionStatement(
-				t.callExpression(scope.importHelper("renderChildren"), [
-					node,
-					t.arrayExpression(childrenCreate)
-				])
-			)
-		);
+
+		if (element.kind === "Fragment") {
+			createStatements.push(
+				t.expressionStatement(
+					t.assignmentExpression(
+						"=",
+						node,
+						t.callExpression(scope.importHelper("createFragment"), [
+							t.arrayExpression(childrenCreate)
+						])
+					)
+				)
+			);
+		} else {
+			createStatements.push(
+				t.expressionStatement(
+					t.callExpression(scope.importHelper("renderChildren"), [
+						node,
+						t.arrayExpression(childrenCreate)
+					])
+				)
+			);
+		}
 	}
 
 	return {

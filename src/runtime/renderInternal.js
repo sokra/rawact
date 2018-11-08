@@ -2,6 +2,7 @@ import createText from "./createText";
 import { runEffects } from "./effects";
 import renderArray from "./renderArray";
 import toText from "./toText";
+import replaceNode from "./replaceNode";
 
 const renderInternal = (context, value, property, initialRender) => {
 	const slot = property + "_";
@@ -17,15 +18,15 @@ const renderInternal = (context, value, property, initialRender) => {
 			}
 			initialRender = false;
 			const slotData = context[slot];
-			slotData._rerender = () => {
+			slotData._r = () => {
 				render();
 				runEffects();
 			};
 			context[property] = node = value(slotData, () => {
-				if (context[slot] === slotData) slotData._rerender();
+				if (context[slot] === slotData) slotData._r();
 			});
 			if (old && old !== node) {
-				old.parentElement.replaceChild(node, old);
+				replaceNode(old, node);
 			}
 		};
 		render();
@@ -37,7 +38,7 @@ const renderInternal = (context, value, property, initialRender) => {
 				context[slot] = {};
 				context[slot2] = undefined;
 			}
-			node = renderArray(context, value);
+			node = renderArray(context[slot], value);
 		} else {
 			// text content
 			if (context[slot]) {
@@ -61,7 +62,7 @@ const renderInternal = (context, value, property, initialRender) => {
 		if (!initialRender) {
 			const old = context[property];
 			if (old && old !== node) {
-				old.parentElement.replaceChild(node, old);
+				replaceNode(old, node);
 			}
 		}
 		context[property] = node;

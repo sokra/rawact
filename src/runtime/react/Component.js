@@ -14,9 +14,25 @@ Component[RenderSymbol] = function(props) {
 	}, []);
 
 	const [state, setState] = useState(instance.state);
+
+	const prevProps = useRef(null);
+	const prevState = useRef(null);
+	const prevRenderResult = useRef(null);
+
+	const doUpdate =
+		!prevProps.current ||
+		!instance.shouldComponentUpdate ||
+		instance.shouldComponentUpdate(props, state);
+
 	instance.props = props;
 	instance.state = state;
 	instance.__setState = setState;
+
+	if (!doUpdate) {
+		prevProps.current = props;
+		prevState.current = state;
+		return context => context.a;
+	}
 
 	useEffect(() => {
 		if (instance.componentDidMount) instance.componentDidMount();
@@ -25,8 +41,6 @@ Component[RenderSymbol] = function(props) {
 		};
 	}, []);
 
-	const prevProps = useRef(null);
-	const prevState = useRef(null);
 	useEffect(() => {
 		if (prevProps.current) {
 			if (instance.componentDidUpdate)
@@ -36,7 +50,7 @@ Component[RenderSymbol] = function(props) {
 		prevState.current = state;
 	}, expandObject(props).concat(expandObject(state)));
 
-	return instance.render();
+	return (prevRenderResult.current = instance.render());
 };
 
 Component.prototype.setState = function(newState) {
