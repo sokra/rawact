@@ -1,6 +1,9 @@
 {
   "name": "rawact-app",
   "private": true,
+  "scripts": {
+    "build": "webpack --mode production"
+  },
   "devDependencies": {
     "babel-loader": "^8.0.4",
     "webpack": "^4.25.1",
