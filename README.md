@@ -307,3 +307,235 @@ A base class is provided and uses hooks to implement the behavior of instance me
   - code for all possible props is generated
   - unknown props (i. e. data-xx) is not implemented
 - sync rendering
+
+## Future Work
+
+### Suspend & incremental rendering
+
+To support this we need to change the design a bit. Running the Component function need to be separated from applying the update.
+
+It could be implemented by rendering instructions returning a function to update the DOM update.
+
+Input:
+
+```jsx
+export default () => {
+	return (
+		<div>
+			<Component />
+			<Component />
+		</div>
+	);
+};
+```
+
+```jsx
+const instructions = {};
+
+export default () => {
+	const _child1 = createComponent(Component);
+	const _child2 = createComponent(Component);
+	return context => {
+		const _childRender1 = prepareRenderInternal(context, _child1, "b");
+		const _childRender2 = prepareRenderInternal(context, _child2, "c");
+		return () => {
+			if (context._ !== instructions) {
+				if (context.$) context.$();
+				context.$ = null;
+				context._ = instructions;
+				context.a = createElement("div");
+				_childRender1(1);
+				_childRender2(1);
+				renderChildren(context.a, [context.b, context.c]);
+			} else {
+				_childRender1();
+				_childRender2();
+			}
+		};
+	};
+};
+```
+
+### Merge instructions with unmount
+
+Technically the unmount function only depend on context values. It could be hoisted to module scope and called with `context` argument. The unmount function could then be used as instruction marker, basically merging `context._` and `context.$`.
+
+This could save a few lines of code per component and a function allocation.
+
+Input:
+
+```jsx
+export default ({ test }) => {
+	return <button onClick={test} />;
+};
+```
+
+Annotated output:
+
+```js
+const unmountAndInstructions = context => {
+	removeEventListener(context.a, "click", context.b);
+};
+export default ({ test }) => {
+	const _onClick = test;
+
+	return context => {
+		if (context._ !== unmountAndInstructions) {
+			if (context._) context._(context);
+			context._ = unmountAndInstructions;
+			context.a = createElement("button");
+			addEventListener(context.a, "click", (context.b = _onClick));
+		} else {
+			if (context.b !== _onClick)
+				replaceEventListener(
+					context.a,
+					"click",
+					context.b,
+					(context.b = _onClick)
+				);
+		}
+		return context.a;
+	};
+};
+```
+
+### Server-side rendering
+
+This could be implemented as alternative transpiling mode. This mode would transpile for `renderToString`.
+
+To be able to reuse the DOM created by SSR, we can create JS code on the server to recreate the `context` on the client. This would even work when there is a diff between SSR'd HTML and client-side rendering.
+
+Input:
+
+```jsx
+const Component = () => <button />;
+
+export default ({ test }) => {
+	return (
+		<div className={test}>
+			<Component />
+		</div>
+	);
+};
+```
+
+Server output:
+
+```js
+const instructions = "hr23s";
+const instructions2 = "x7fe2";
+
+const Component = () => ssrContext => {
+	ssrContext.add("_", JSON.stringify(instructions));
+	ssrContext.add("a", ssrContext.node);
+	ssrContext.setNodeCount(1);
+	return `<button>`;
+};
+
+export default ({ test }) => {
+	const _className = test;
+	const _child = ssrCreateComponent(Component);
+
+	return ssrContext => {
+		ssrContext.add("_", JSON.stringify(instructions2));
+		ssrContext.add("a", ssrContext.node);
+		ssrContext.add("b", JSON.stringify(_className));
+		const container = ssrContext.createNodesContainer(
+			`${ssrContext.node}.childNodes`
+		);
+		const childContext = ssrContext.createChildContext(
+			container,
+			/* node slot */ "c",
+			/* context slot */ "c_"
+		);
+		const childHtml = ssrRenderInternal(childContext, _child);
+		ssrContext.setNodeCount(1);
+		return `<div class="${escape(_className)}">${childHtml}</div>`;
+	};
+};
+```
+
+Generated HTML: `<div class="test-class-name"><button></div>`
+
+Context emitting this code (`ssrContext.toCode()`):
+
+```js
+const SSR_GENERATED_CONTEXT = a => {
+	var b, c;
+	return {
+		_: "x7fe2",
+		a: (b = a.childNodes[0]),
+		b: "test-class-name",
+		c_: {
+			_: "hr23s",
+			a: (c = b.childNodes[0])
+		},
+		c: c
+	};
+};
+```
+
+Client bootstrapping:
+
+```js
+const mountNode = document.getElementById("root");
+
+// This sets the context for mountNode
+React.restoreFromSSR(mountNode, SSR_GENERATED_CONTEXT);
+
+// This will render with the precreated context
+// => Will do a update (nop if nothing changed since than)
+React.render(<App />, mountNode);
+```
+
+### Minimizing generated code size
+
+Some repeated code could be moved into helpers.
+
+Example: All render instruction start with the some code. This could be moved into a helper:
+
+Input:
+
+```jsx
+export default ({ test }) => {
+	return <div className={test} />;
+};
+```
+
+Annotated output:
+
+```js
+const instructions = {};
+export default ({ test }) => {
+	const _className = test;
+
+	return context => {
+		if (htmlElementInstructions(context, instructions, "div")) {
+			context.a.className = context.b = _className;
+		} else {
+			if (context.b !== _className)
+				context.a.className = context.b = _className;
+		}
+		return context.a;
+	};
+};
+```
+
+Minimized output:
+
+```js
+const I={}
+export default({test:a})=>c=>(h(c,I,"div")?c.a.className=c.b=a:c.b!==a&&c.a.className=c.b=a,c.a)
+```
+
+Pretty minimized output:
+
+```js
+const I={}
+export default ({ test: a }) => c => (
+	h(c, I, "div")
+		? c.a.className = c.b = a
+		: c.b !== a && c.a.className = c.b = a,
+	c.a
+)
+```
