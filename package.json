@@ -11,6 +11,9 @@
     "start": "rimraf lib && babel src -d lib -w",
     "test": "jest"
   },
+  "files": [
+    "lib"
+  ],
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/helper-plugin-utils": "^7.0.0"
