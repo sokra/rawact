@@ -24,6 +24,23 @@ Rawact (raw-react) is a babel plugin which does this transformation.
 
 State: This is in PROOF OF CONCEPT state. DO NOT USE IT IN PRODUCTION!
 
+## When does it make sense?
+
+Assuming this tool would make it to a complete and stable tool, it could make sense to use in these cases:
+
+- Small application with total components code < react size
+  - Rawact will decrease the total JS size
+- Code Splitted application with priority on initial rendering
+  - Without loading react the application will bootstrap faster
+- Compiling WebComponents from React components
+  - You don't want to ship React with your components
+- Applications with many component instances which are changing frequently
+  - Using direct DOM operations has less overhead than using a framework
+- Applications running on low-end devices
+  - Using direct DOM operations has less overhead than using a framework
+
+Every application is different. Best measure it to see if it makes sense in your case.
+
 ## Usage
 
 ```
