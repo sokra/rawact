@@ -91,7 +91,7 @@ rawact has the notation of rendering instructions, which are functions usually c
 
 Other properties can be used in any way by the rendering instructions.
 
-`rerender` is a function which can be called to trigger a new execution of the rendering instructions (and node update if a new node is retured).
+`rerender` is a function which can be called to trigger a new execution of the rendering instructions (and node update if a new node is returned).
 
 ### React.createElement
 
