@@ -18,6 +18,8 @@ This approach is doable, but lacks DX. Writing React.js components is simpler th
 
 What if we could transpile React.js components to native DOM operations at build-time? This would eliminate the need for the react library at cost of a bit larger component code.
 
+[Svelte](https://svelte.technology/) has proven that this type of framework-eliminating transpilation can work very well.
+
 ## Introducing Rawact
 
 Rawact (raw-react) is a babel plugin which does this transformation.
