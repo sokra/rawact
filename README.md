@@ -64,7 +64,7 @@ Repo: [https://github.com/sokra/todo-mvc-react-hooks-experiments](https://github
 
 This is basically the only application working for this proof of concept.
 
-with rawact: 18.3 KiB
+with rawact: 19.8 KiB
 
 with react: 126 KiB
 
