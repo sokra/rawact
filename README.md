@@ -577,4 +577,4 @@ const Counter = ({ step }) => {
 ReactDOM.render(<Counter step={1} />, document.getElementById("root"));
 ```
 
-produces a bundle with 3.9 KiB compared to 115 KiB with react and react-dom.
+produces a bundle with 4.3 KiB compared to 115 KiB with react and react-dom.

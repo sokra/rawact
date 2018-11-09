@@ -14,13 +14,18 @@ Component[RenderSymbol] = function(props) {
 	}, []);
 
 	const [state, setState] = useState(instance.state);
+	const [forceRenderGen, setForceRenderGen] = useState(0);
 
+	instance.__setForceRenderGen = setForceRenderGen;
+	instance.__forceRenderGen = forceRenderGen;
+
+	const prevForceRenderGen = useRef(null);
 	const prevProps = useRef(null);
 	const prevState = useRef(null);
 	const prevRenderResult = useRef(null);
 
 	const doUpdate =
-		!prevProps.current ||
+		prevForceRenderGen.current !== forceRenderGen ||
 		!instance.shouldComponentUpdate ||
 		instance.shouldComponentUpdate(props, state);
 
@@ -29,6 +34,7 @@ Component[RenderSymbol] = function(props) {
 	instance.__setState = setState;
 
 	if (!doUpdate) {
+		prevForceRenderGen.current = forceRenderGen;
 		prevProps.current = props;
 		prevState.current = state;
 		return context => context.a;
@@ -46,6 +52,7 @@ Component[RenderSymbol] = function(props) {
 			if (instance.componentDidUpdate)
 				instance.componentDidUpdate(prevProps.current, prevState.current);
 		}
+		prevForceRenderGen.current = forceRenderGen;
 		prevProps.current = props;
 		prevState.current = state;
 	}, expandObject(props).concat(expandObject(state)));
@@ -55,6 +62,10 @@ Component[RenderSymbol] = function(props) {
 
 Component.prototype.setState = function(newState) {
 	this.__setState(Object.assign({}, this.state, newState));
+};
+
+Component.prototype.forceUpdate = function() {
+	this.__setForceRenderGen(this.__forceRenderGen + 1);
 };
 
 export { Component as default };

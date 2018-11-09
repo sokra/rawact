@@ -6,10 +6,15 @@ import attributesByElement from "./attributesByElement";
 const parse = ([typeNode, propNode, ...children], helpers) => {
 	const props = new Map();
 	let dynamicProps = undefined;
+	let keyNode = undefined;
 	if (t.isObjectExpression(propNode)) {
 		for (const prop of propNode.properties) {
 			if (t.isIdentifier(prop.key)) {
-				props.set(prop.key.name, prop.value);
+				if (prop.key.name === "key") {
+					keyNode = prop.value;
+				} else {
+					props.set(prop.key.name, prop.value);
+				}
 			}
 		}
 	} else if (!t.isNullLiteral(propNode)) {
@@ -20,10 +25,11 @@ const parse = ([typeNode, propNode, ...children], helpers) => {
 		kind: isFragment
 			? "Fragment"
 			: t.isStringLiteral(typeNode)
-				? "html"
-				: "Component",
+			? "html"
+			: "Component",
 		typeNode,
 		props,
+		keyNode,
 		dynamicProps,
 		children
 	};
@@ -102,6 +108,7 @@ const createNativeElement = (element, scope) => {
 	const createStatements = [];
 	const updateStatements = [];
 	const unmountStatements = [];
+	let key = undefined;
 
 	let children = element.children;
 
@@ -266,7 +273,8 @@ const createNativeElement = (element, scope) => {
 		create: createStatements,
 		update: updateStatements,
 		unmount: unmountStatements,
-		node
+		node,
+		key
 	};
 };
 
@@ -289,11 +297,12 @@ const createComponentInstructions = (element, helpers) => {
 	} else if (element.children.length === 1) {
 		props.push(t.objectProperty(t.identifier("children"), element.children[0]));
 	}
-	const renderCall = t.callExpression(helpers.importHelper("hooks"), [
+	let instructions = t.callExpression(helpers.importHelper("hooks"), [
 		element.typeNode,
 		t.objectExpression(props)
 	]);
-	return renderCall;
+	instructions = ensureKey(instructions, helpers, element.keyNode);
+	return instructions;
 };
 
 const ensureCapture = (expr, scope) => {
@@ -308,12 +317,18 @@ const ensureCapture = (expr, scope) => {
 	);
 };
 
+const ensureKey = (expr, helpers, key) => {
+	if (!key) return expr;
+	const withKey = helpers.importHelper("withKey");
+	return t.callExpression(withKey, [key, expr]);
+};
+
 const createNativeInstructions = (parsedElement, helpers) => {
 	const scope = new ContextScope(helpers);
 	const element = createNativeElement(parsedElement, scope);
 	const token = scope.createGlobalToken("instructions");
 	const test = t.binaryExpression("!==", scope.type(), token);
-	const instructions = t.arrowFunctionExpression(
+	let instructions = t.arrowFunctionExpression(
 		[scope.context()],
 		t.blockStatement([
 			t.ifStatement(
@@ -346,7 +361,11 @@ const createNativeInstructions = (parsedElement, helpers) => {
 			t.returnStatement(element.node)
 		])
 	);
-	return ensureCapture(instructions, scope);
+	if (parsedElement.keyNode) {
+		instructions = ensureKey(instructions, helpers, parsedElement.keyNode);
+	}
+	instructions = ensureCapture(instructions, scope);
+	return instructions;
 };
 
 export default (node, helpers) => {
