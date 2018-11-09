@@ -12,7 +12,7 @@ Because of this design react-dom includes code for every possible component/HTML
 
 This has an overhead on the initial page load for downloading and evaluating the library.
 
-But there are applications which do not need all these features (at initial page load). For such applications it might make sense to use native DOM operations to build the interactive user interface. A prominent example is Netfix, that removed client-side React.js from the landing page and rebuild interactivity with native DOM code.
+But there are applications which do not need all these features (at initial page load). For such applications it might make sense to use native DOM operations to build the interactive user interface. A prominent example is Netflix, that removed client-side React.js from the landing page and rebuild interactivity with native DOM code.
 
 This approach is doable, but leaks DX. Writing React.js components is simpler that write native DOM code.
 
