@@ -5,10 +5,11 @@ export default (factory, dependencies = [factory]) => {
 	const [hooks, index] = createSlot();
 	if (!hooks[index]) {
 		const entry = {
-			value: factory(),
+			value: undefined,
 			dependencies
 		};
 		hooks.push(entry);
+		entry.value = factory();
 		return entry.value;
 	} else {
 		const entry = hooks[index];
