@@ -14,6 +14,7 @@ export default (factory, dependencies = [factory]) => {
 		const entry = hooks[index];
 		if (compareDependencies(dependencies, entry.dependencies))
 			return entry.value;
+		entry.dependencies = dependencies;
 		return (entry.value = factory());
 	}
 };
