@@ -79,6 +79,7 @@ export default (
 			(local, store) =>
 				t.expressionStatement(
 					t.callExpression(scope.importHelper("addEventListener"), [
+						scope.root(),
 						node,
 						t.stringLiteral(event),
 						store(createListener(local))
@@ -87,6 +88,7 @@ export default (
 			(old, local, store) =>
 				t.expressionStatement(
 					t.callExpression(scope.importHelper("replaceEventListener"), [
+						scope.root(),
 						node,
 						t.stringLiteral(event),
 						old,
@@ -96,6 +98,7 @@ export default (
 			old =>
 				t.expressionStatement(
 					t.callExpression(scope.importHelper("removeEventListener"), [
+						scope.root(),
 						node,
 						t.stringLiteral(event),
 						old

@@ -7,13 +7,14 @@ import replaceNode from "./replaceNode";
 const renderInternal = (context, value, property, initialRender) => {
 	const slot = property + "_";
 	const slot2 = property + "$";
+	const $$ = context.$$;
 	if (typeof value === "function") {
 		// render instructions
 		const render = () => {
 			const old = !initialRender && context[property];
 			let node;
 			if (initialRender || !context[slot]) {
-				context[slot] = {};
+				context[slot] = { $$ };
 				context[slot2] = undefined;
 			}
 			initialRender = false;
@@ -35,7 +36,7 @@ const renderInternal = (context, value, property, initialRender) => {
 		if (Array.isArray(value)) {
 			// render array
 			if (initialRender || !context[slot]) {
-				context[slot] = {};
+				context[slot] = { $$ };
 				context[slot2] = undefined;
 			}
 			node = renderArray(context[slot], value);

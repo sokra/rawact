@@ -55,6 +55,10 @@ class ContextScope {
 		return t.memberExpression(this.contextName, t.identifier("$"));
 	}
 
+	root() {
+		return t.memberExpression(this.contextName, t.identifier("$$"));
+	}
+
 	_slotIndexToName(i, name) {
 		return this.helpers.debug
 			? `${numberToIdentifer(i)}_${name}`

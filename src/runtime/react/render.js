@@ -5,7 +5,7 @@ const map = new WeakMap();
 export default (element, parentNode) => {
 	let context = map.get(parentNode);
 	if (!context) {
-		map.set(parentNode, (context = {}));
+		map.set(parentNode, (context = { $$: { node: parentNode } }));
 	}
 	renderInternal(context, element, "node", false);
 	const node = context.node;

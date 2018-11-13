@@ -1,4 +1,3 @@
-export default (node, event, old, handler) => {
-	node.removeEventListener(event, old);
-	node.addEventListener(event, handler);
+export default (root, node, event, old, handler) => {
+	root[`event_${event}`].set(node, handler);
 };

@@ -10,7 +10,7 @@ export default (context, array) => {
 
 		// Clear the context to not be influenced by old data
 		for (let key in context) {
-			if (Object.prototype.hasOwnProperty.call(context, key)) {
+			if (Object.prototype.hasOwnProperty.call(context, key) && key !== "$$") {
 				context[key] = undefined;
 			}
 		}

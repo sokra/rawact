@@ -38,9 +38,10 @@ export default (component, props) => {
 				for (const cleanup of compCleanup) {
 					cleanup();
 				}
+				if (context.a.$) context.a.$();
 			};
 			context._ = component;
-			context.a = {};
+			context.a = { $$: context.$$ };
 			context.b = undefined;
 		}
 		hooks = context._hooks;
