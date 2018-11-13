@@ -8,6 +8,7 @@ export default initialValue => {
 		};
 		ref.current = initialValue;
 		hooks.push(ref);
+		return ref;
 	}
 	return hooks[index];
 };
