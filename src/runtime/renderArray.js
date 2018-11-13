@@ -13,10 +13,16 @@ export default (context, array) => {
 			for (const itemContext of context.ctxs.values()) {
 				if (itemContext.$) itemContext.$();
 			}
+			const ctxsNonKey = context.ctxsNonKey;
+			for (let i = 0; i < ctxsNonKey.length; i++) {
+				const itemContext = ctxsNonKey[i];
+				if (itemContext.$) itemContext.$();
+			}
 		};
 		context._ = ARRAY_MARKER;
 
 		context.ctxs = new Map();
+		context.ctxsNonKey = [];
 		context.nodeMap = undefined;
 		context.fragment = [];
 	}
@@ -26,12 +32,13 @@ export default (context, array) => {
 	const fragment = context.fragment;
 	const keys = new Set();
 	const nodeMap = new Map();
-	const keysArray = array.map((item, i) => {
-		const key = KeySymbol in item ? `key[${item[KeySymbol]}]` : `item${i}`;
+	const keysArray = array.map(item => {
+		const key = item[KeySymbol];
 		keys.add(key);
 		return key;
 	});
-	const unused = [];
+	const unused = context.ctxsNonKey;
+	const ctxsNonKey = (context.ctxsNonKey = []);
 	for (const pair of ctxs) {
 		if (!keys.has(pair[0])) {
 			unused.push(pair[1]);
@@ -41,14 +48,24 @@ export default (context, array) => {
 	let unusedIndex = 0;
 	const items = array.map((item, i) => {
 		const key = keysArray[i];
-		let childContext = ctxs.get(key);
-		if (!childContext) {
+		let childContext;
+		if (key === undefined) {
 			if (unusedIndex < unused.length) {
 				childContext = unused[unusedIndex++];
 			} else {
 				childContext = { $$ };
 			}
-			ctxs.set(key, childContext);
+			ctxsNonKey.push(childContext);
+		} else {
+			childContext = ctxs.get(key);
+			if (childContext === undefined) {
+				if (unusedIndex < unused.length) {
+					childContext = unused[unusedIndex++];
+				} else {
+					childContext = { $$ };
+				}
+				ctxs.set(key, childContext);
+			}
 		}
 		renderInternal(childContext, item, "a", false);
 		const node = childContext.a;
