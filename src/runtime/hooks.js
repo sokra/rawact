@@ -41,6 +41,7 @@ export default (component, props) => {
 			};
 			context._ = component;
 			context.a = {};
+			context.b = undefined;
 		}
 		hooks = context._hooks;
 		cleanup = context._cleanup;
@@ -58,6 +59,9 @@ export default (component, props) => {
 		currentRerender = undefined;
 		currentComponent = undefined;
 
-		return instructions(context.a, rerender);
+		if (context.b === instructions) return context.c;
+
+		context.b = instructions;
+		return (context.c = instructions(context.a, rerender));
 	};
 };
