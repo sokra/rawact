@@ -5,59 +5,66 @@ const ARRAY_MARKER = {};
 export const KeySymbol = Symbol();
 
 export default (context, array) => {
+	const $$ = context.$$;
 	if (context._ !== ARRAY_MARKER) {
 		if (context.$) context.$();
 
-		// Clear the context to not be influenced by old data
-		for (let key in context) {
-			if (Object.prototype.hasOwnProperty.call(context, key) && key !== "$$") {
-				context[key] = undefined;
-			}
-		}
-
 		context.$ = () => {
-			const oldItems = context.items;
-			if (oldItems) {
-				for (let i = 0; i < oldItems.length; i++) {
-					const itemContext = oldItems[i].context;
-					if (itemContext.$) itemContext.$();
-				}
+			for (const itemContext of context.ctxs.values()) {
+				if (itemContext.$) itemContext.$();
 			}
 		};
 		context._ = ARRAY_MARKER;
+
+		context.ctxs = new Map();
+		context.nodeMap = undefined;
+		context.fragment = [];
 	}
 
-	const oldItems = context.items;
+	const ctxs = context.ctxs;
 	const oldNodeMap = context.nodeMap;
-	const fragment = (context.fragment = context.fragment || []);
+	const fragment = context.fragment;
 	const keys = new Set();
 	const nodeMap = new Map();
-	context.items = array.map((item, i) => {
+	const keysArray = array.map((item, i) => {
 		const key = KeySymbol in item ? `key[${item[KeySymbol]}]` : `item${i}`;
-		renderInternal(context, item, key, false);
-		const node = context[key];
 		keys.add(key);
+		return key;
+	});
+	const unused = [];
+	for (const pair of ctxs) {
+		if (!keys.has(pair[0])) {
+			unused.push(pair[1]);
+			ctxs.delete(pair[0]);
+		}
+	}
+	let unusedIndex = 0;
+	const items = array.map((item, i) => {
+		const key = keysArray[i];
+		let childContext = ctxs.get(key);
+		if (!childContext) {
+			if (unusedIndex < unused.length) {
+				childContext = unused[unusedIndex++];
+			} else {
+				childContext = { $$ };
+			}
+			ctxs.set(key, childContext);
+		}
+		renderInternal(childContext, item, "a", false);
+		const node = childContext.a;
 		nodeMap.set(node, i);
-		return {
-			key,
-			node,
-			context: context[key + "_"]
-		};
+		return node;
 	});
 	context.nodeMap = nodeMap;
 
 	// Run unmount on removed items
-	if (oldItems) {
-		for (let i = 0; i < oldItems.length; i++) {
-			const item = oldItems[i];
-			if (!keys.has(item.key)) {
-				if (item.context.$) item.context.$();
-			}
-		}
+	for (; unusedIndex < unused.length; unusedIndex++) {
+		const childContext = unused[unusedIndex];
+		if (childContext.$) childContext.$();
 	}
 
 	// update fragment (and DOM) to new structure
-	const marker = context.items.length === 0 && document.createComment("RAWACT");
+	const marker = items.length === 0 && document.createComment("RAWACT");
 	const last = fragment[fragment.length - 1];
 	const followingNode = last && last.nextSibling;
 	const parentNode = last && last.parentNode;
@@ -65,11 +72,7 @@ export default (context, array) => {
 	let offset = 0;
 	while (true) {
 		const goalNode =
-			i === 0 && marker
-				? marker
-				: i < context.items.length
-				? context.items[i].node
-				: null;
+			i === 0 && marker ? marker : i < items.length ? items[i] : null;
 		const currentNode = fragment[i];
 
 		// Figure out where the currentNode should be instead
