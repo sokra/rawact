@@ -86,7 +86,6 @@ export default (context, array) => {
 
 		// Equal great, continue with next one
 		if (goalNode && goalNode === currentNode) {
-			const goalNodeSource = oldNodeMap.get(goalNode) + offset;
 			i++;
 			continue;
 		}
