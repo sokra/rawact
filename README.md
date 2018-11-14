@@ -6,7 +6,7 @@ A babel plugin which compiles React.js components into native DOM instructions t
 
 React.js is split into two packages (for in browser usage): react and react-dom.
 
-The react package is a general way to descript components and element. The react-dom package takes care of rendering these generic elements.
+The react package is a general way to describe components and elements. The react-dom package takes care of rendering these generic elements.
 
 Because of this design react-dom includes code for every possible component/HTMLElement that can be rendered. It also includes code for incremental rendering, scheduling, event handling, etc.
 
