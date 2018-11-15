@@ -46,6 +46,7 @@ export default (context, array) => {
 		}
 	}
 	let unusedIndex = 0;
+	let isNodeKept = false;
 	const items = array.map((item, i) => {
 		const key = keysArray[i];
 		let childContext;
@@ -63,8 +64,10 @@ export default (context, array) => {
 				ctxs.set(key, childContext);
 			}
 		}
+		const oldNode = childContext.a;
 		renderInternal(childContext, item, "a", false);
 		const node = childContext.a;
+		if (oldNode === node) isNodeKept = true;
 		nodeMap.set(node, i);
 		return node;
 	});
@@ -76,16 +79,21 @@ export default (context, array) => {
 		if (childContext.$) childContext.$();
 	}
 
+	// take shortcuts for clearing all items
+	if (items.length === 0) {
+		return (context.fragment = [document.createComment("RAWACT")]);
+	} else if (!isNodeKept) {
+		return (context.fragment = items);
+	}
+
 	// update fragment (and DOM) to new structure
-	const marker = items.length === 0 && document.createComment("RAWACT");
 	const last = fragment[fragment.length - 1];
 	const followingNode = last && last.nextSibling;
 	const parentNode = last && last.parentNode;
 	let i = 0;
 	let offset = 0;
 	while (true) {
-		const goalNode =
-			i === 0 && marker ? marker : i < items.length ? items[i] : null;
+		const goalNode = i < items.length ? items[i] : null;
 		const currentNode = fragment[i];
 
 		// Figure out where the currentNode should be instead

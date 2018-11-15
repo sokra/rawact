@@ -17,23 +17,27 @@ const toArrayInteral = (x, array) => {
 export default (oldNodes, newNodes) => {
 	oldNodes = toArray(oldNodes);
 	newNodes = toArray(newNodes);
-	for (const old of oldNodes) {
-		if (!old.isConnected) debugger;
-	}
 	const parentNode = oldNodes[0].parentNode;
 	const nextOne = oldNodes[oldNodes.length - 1].nextSibling;
-	const oldSet = new Set(oldNodes);
-	let j = 0;
-	for (let i = 0; i < newNodes.length; i++) {
-		const node = newNodes[i];
-		oldSet.delete(node);
-		if (nextOne) {
-			parentNode.insertBefore(newNodes[i], nextOne);
-		} else {
+	if (!nextOne && parentNode.firstChild === oldNodes[0]) {
+		// replaced whole parent: take shortcut to clear nodes here
+		parentNode.textContent = "";
+		for (let i = 0; i < newNodes.length; i++) {
 			parentNode.appendChild(newNodes[i]);
 		}
-	}
-	for (const old of oldSet) {
-		parentNode.removeChild(old);
+	} else {
+		const oldSet = new Set(oldNodes);
+		for (let i = 0; i < newNodes.length; i++) {
+			const node = newNodes[i];
+			oldSet.delete(node);
+			if (nextOne) {
+				parentNode.insertBefore(newNodes[i], nextOne);
+			} else {
+				parentNode.appendChild(newNodes[i]);
+			}
+		}
+		for (const old of oldSet) {
+			parentNode.removeChild(old);
+		}
 	}
 };
