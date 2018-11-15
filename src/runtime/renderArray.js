@@ -59,11 +59,7 @@ export default (context, array) => {
 		} else {
 			childContext = ctxs.get(key);
 			if (childContext === undefined) {
-				if (unusedIndex < unused.length) {
-					childContext = unused[unusedIndex++];
-				} else {
-					childContext = { $$ };
-				}
+				childContext = { $$ };
 				ctxs.set(key, childContext);
 			}
 		}
