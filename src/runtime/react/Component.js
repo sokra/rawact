@@ -1,71 +1,81 @@
-import { RenderSymbol } from "../hooks";
-import useEffect from "./useEffect";
-import useRef from "./useRef";
-import useMemo from "./useMemo";
-import useState from "./useState";
-import expandObject from "../expandObject";
+import * as hooks from "../hooks";
+import * as effects from "../effects";
 
 function Component(props) {
 	this.props = props;
 }
-Component[RenderSymbol] = function(props) {
-	const instance = useMemo(() => {
-		return new this(props);
-	}, []);
 
-	const [state, setState] = useState(instance.state);
-	const [forceRenderGen, setForceRenderGen] = useState(0);
-
-	instance.__setForceRenderGen = setForceRenderGen;
-	instance.__forceRenderGen = forceRenderGen;
-
-	const prevForceRenderGen = useRef(null);
-	const prevProps = useRef(null);
-	const prevState = useRef(null);
-	const prevRenderResult = useRef(null);
-
-	const doUpdate =
-		prevForceRenderGen.current !== forceRenderGen ||
-		!instance.shouldComponentUpdate ||
-		instance.shouldComponentUpdate(props, state);
-
-	instance.props = props;
-	instance.state = state;
-	instance.__setState = setState;
-
-	if (!doUpdate) {
-		prevForceRenderGen.current = forceRenderGen;
-		prevProps.current = props;
-		prevState.current = state;
-		return context => context.a;
-	}
-
-	useEffect(() => {
-		if (instance.componentDidMount) instance.componentDidMount();
-		return () => {
-			if (instance.componentWillUnmount) instance.componentWillUnmount();
+Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
+	var [slots, index] = hooks.createSlot();
+	var slot = slots[index];
+	var instance;
+	var rerender;
+	var stateChanges;
+	var shouldUpdate;
+	var prevProps;
+	var prevState;
+	var newState;
+	var i;
+	if (!slot) {
+		rerender = hooks.createScheduleRender();
+		stateChanges = [];
+		instance = new Class(newProps);
+		instance.props = newProps;
+		slot = slots[index] = {
+			i: instance,
+			s: stateChanges,
+			f: false, // forceRender flag
+			r: undefined // rendering instructions
 		};
-	}, []);
-
-	useEffect(() => {
-		if (prevProps.current) {
-			if (instance.componentDidUpdate)
-				instance.componentDidUpdate(prevProps.current, prevState.current);
+		instance.setState = newState => {
+			stateChanges.push(
+				typeof newState === "function" ? newState : () => newState
+			);
+			rerender();
+		};
+		instance.forceUpdate = () => {
+			slot.f = true;
+			rerender();
+		};
+		effects.addEffect(() => {
+			instance.componentDidMount();
+		});
+		hooks.addCleanup(() => {
+			instance.componentWillUnmount();
+		});
+		return (slot.r = instance.render());
+	} else {
+		instance = slot.i;
+		prevProps = instance.props;
+		prevState = instance.state;
+		stateChanges = slot.s;
+		newState = prevState;
+		for (i = 0; i < stateChanges.length; i++) {
+			newState = Object.assign({}, newState, stateChanges[i](newState));
 		}
-		prevForceRenderGen.current = forceRenderGen;
-		prevProps.current = props;
-		prevState.current = state;
-	}, expandObject(props).concat(expandObject(state)));
+		stateChanges.length = 0;
 
-	return (prevRenderResult.current = instance.render());
+		shouldUpdate = slot.f || instance.shouldComponentUpdate(newProps, newState);
+
+		instance.props = newProps;
+		instance.state = newState;
+		slot.f = false;
+
+		if (shouldUpdate) {
+			effects.addEffect(() => {
+				instance.componentDidUpdate(prevProps, prevState);
+			});
+
+			slot.r = instance.render();
+		}
+
+		return slot.r;
+	}
 };
 
-Component.prototype.setState = function(newState) {
-	this.__setState(Object.assign({}, this.state, newState));
-};
-
-Component.prototype.forceUpdate = function() {
-	this.__setForceRenderGen(this.__forceRenderGen + 1);
-};
+Component.prototype.shouldComponentUpdate = () => true;
+Component.prototype.componentDidUpdate = () => {};
+Component.prototype.componentWillUnmount = () => {};
+Component.prototype.componentDidMount = () => {};
 
 export { Component as default };
