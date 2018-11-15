@@ -9,7 +9,6 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 	var [slots, index] = hooks.createSlot();
 	var slot = slots[index];
 	var instance;
-	var rerender;
 	var stateChanges;
 	var shouldUpdate;
 	var prevProps;
@@ -17,13 +16,13 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 	var newState;
 	var i;
 	if (!slot) {
-		rerender = hooks.createScheduleRender();
 		stateChanges = [];
 		instance = new Class(newProps);
 		instance.props = newProps;
 		slot = slots[index] = {
 			i: instance,
 			s: stateChanges,
+			u: hooks.createScheduleRender(),
 			f: false, // forceRender flag
 			r: undefined // rendering instructions
 		};
@@ -31,11 +30,11 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 			stateChanges.push(
 				typeof newState === "function" ? newState : () => newState
 			);
-			rerender();
+			slot.u();
 		};
 		instance.forceUpdate = () => {
 			slot.f = true;
-			rerender();
+			slot.u();
 		};
 		effects.addEffect(() => {
 			instance.componentDidMount();
@@ -46,6 +45,7 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 		return (slot.r = instance.render());
 	} else {
 		instance = slot.i;
+		slot.u = hooks.createScheduleRender();
 		prevProps = instance.props;
 		prevState = instance.state;
 		stateChanges = slot.s;
