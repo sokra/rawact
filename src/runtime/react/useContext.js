@@ -7,7 +7,7 @@ export default context => {
 		if (symbol in comp) {
 			return comp[symbol];
 		}
-		comp = comp._parent;
+		comp = comp.p; // parent
 	} while (comp);
 	return context.defaultValue;
 };

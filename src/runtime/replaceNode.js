@@ -15,6 +15,7 @@ const toArrayInteral = (x, array) => {
 };
 
 export default (oldNodes, newNodes) => {
+	if (oldNodes === newNodes) return;
 	oldNodes = toArray(oldNodes);
 	newNodes = toArray(newNodes);
 	const parentNode = oldNodes[0].parentNode;

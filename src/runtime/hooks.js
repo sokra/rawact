@@ -1,11 +1,11 @@
-let hooks = undefined;
+let slots = undefined;
 let cleanup = undefined;
 let index = undefined;
 let currentRerender = undefined;
 let currentComponent = undefined;
 
 export function createSlot() {
-	return [hooks, index++];
+	return [slots, index++];
 }
 
 export function getComponent() {
@@ -28,41 +28,36 @@ export const RenderSymbol = Symbol();
 
 export default (component, props) => {
 	const parent = currentComponent;
+	const renderMethod = component.prototype[RenderSymbol];
+	const render = renderMethod || component;
 	return (context, rerender) => {
 		if (context._ !== component) {
-			context._parent = parent;
-			context._hooks = [];
-			const compCleanup = (context._cleanup = []);
+			context.p = parent;
+			context.s = [];
+			const compCleanup = (context.c = []);
 			if (context.$) context.$();
 			context.$ = () => {
 				for (const cleanup of compCleanup) {
 					cleanup();
 				}
-				if (context.a.$) context.a.$();
+				if (context.x.$) context.x.$();
 			};
 			context._ = component;
-			context.a = { $$: context.$$ };
-			context.b = undefined;
+			context.x = { $$: context.$$ }; // child context
+			context.i = undefined; // instructions
+			context.n = undefined; // node
 		}
-		hooks = context._hooks;
-		cleanup = context._cleanup;
+		slots = context.s;
+		cleanup = context.c;
 		index = 0;
 		currentRerender = rerender;
 		currentComponent = context;
 
-		const instructions = component[RenderSymbol]
-			? component[RenderSymbol](props)
-			: component(props);
+		const instructions = render(props, component);
 
-		hooks = undefined;
-		cleanup = undefined;
-		index = undefined;
-		currentRerender = undefined;
-		currentComponent = undefined;
+		if (context.i === instructions) return context.n;
 
-		if (context.b === instructions) return context.c;
-
-		context.b = instructions;
-		return (context.c = instructions(context.a, rerender));
+		context.i = instructions;
+		return (context.n = instructions(context.x, rerender));
 	};
 };
