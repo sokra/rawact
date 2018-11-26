@@ -24,7 +24,7 @@ What if we could transpile React.js components to native DOM operations at build
 
 Rawact (raw-react) is a babel plugin which does this transformation.
 
-State: This is in PROOF OF CONCEPT state. DO NOT USE IT IN PRODUCTION!
+**State: This is in PROOF OF CONCEPT state. DO NOT USE IT IN PRODUCTION!**
 
 ## When does it make sense?
 
