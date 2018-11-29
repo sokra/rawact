@@ -1,13 +1,13 @@
 const toArray = x => {
 	const array = [];
-	toArrayInteral(x, array);
+	toArrayInternal(x, array);
 	return array;
 };
 
-const toArrayInteral = (x, array) => {
+const toArrayInternal = (x, array) => {
 	if (Array.isArray(x)) {
 		for (const item of x) {
-			toArrayInteral(item, array);
+			toArrayInternal(item, array);
 		}
 	} else {
 		array.push(x);
