@@ -2,7 +2,7 @@ import React from "react";
 
 const Hello = ({ name }) => <p>Hello {name}!</p>;
 
-export default () => {
+const Wrapped = () => {
 	return (
 		<div title={"hello"}>
 			<Hello name="World" />
@@ -10,3 +10,13 @@ export default () => {
 		</div>
 	);
 };
+
+describe('basic', () => {
+	it('renders correctly', () => {
+		const element = document.createElement('div');
+
+		const component = ReactDOM.render(<Wrapped/>, element);
+
+		expect(element).toMatchSnapshot();
+	});
+});
