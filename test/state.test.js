@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import * as State from './cases/state';
 import renderHelper from "./renderHelper";
 

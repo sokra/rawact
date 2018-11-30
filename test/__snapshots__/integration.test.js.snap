@@ -385,6 +385,173 @@ var ChangingChildrenElement = function ChangingChildrenElement(_ref4) {
 exports.ChangingChildrenElement = ChangingChildrenElement;"
 `;
 
+exports[`integration should compile lifecycle 1`] = `
+"\\"use strict\\";
+
+Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
+exports.Outer = exports.getLogMessages = void 0;
+
+var _createElement = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createElement\\"));
+
+var _renderInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderInternal\\"));
+
+var _unmountInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/unmountInternal\\"));
+
+var _renderChildren = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderChildren\\"));
+
+var _hooks = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/hooks\\"));
+
+var React = _interopRequireWildcard(require(\\"babel-plugin-rawact/lib/runtime/react\\"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _instructions = {};
+var _instructions2 = {};
+
+function _typeof(obj) { if (typeof Symbol === \\"function\\" && typeof Symbol.iterator === \\"symbol\\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \\"function\\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \\"symbol\\" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\\"Cannot call a class as a function\\"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\\"value\\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \\"object\\" || typeof call === \\"function\\")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\\"this hasn't been initialised - super() hasn't been called\\"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== \\"function\\" && superClass !== null) { throw new TypeError(\\"Super expression must either be null or a function\\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var log = [];
+
+var logger = function logger(msg) {
+  return function () {
+    // return true for shouldComponentUpdate
+    log.push(msg);
+    return true;
+  };
+};
+
+var getLogMessages = function getLogMessages() {
+  var returnedLog = log;
+  log = [];
+  return returnedLog;
+};
+
+exports.getLogMessages = getLogMessages;
+
+var Outer =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Outer, _React$Component);
+
+  function Outer() {
+    var _this;
+
+    _classCallCheck(this, Outer);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Outer).call(this));
+    _this.UNSAFE_componentWillMount = logger('outer componentWillMount');
+    _this.componentDidMount = logger('outer componentDidMount');
+    _this.UNSAFE_componentWillReceiveProps = logger('outer componentWillReceiveProps');
+    _this.shouldComponentUpdate = logger('outer shouldComponentUpdate');
+    _this.UNSAFE_componentWillUpdate = logger('outer componentWillUpdate');
+    _this.componentDidUpdate = logger('outer componentDidUpdate');
+    _this.componentWillUnmount = logger('outer componentWillUnmount');
+    return _this;
+  }
+
+  _createClass(Outer, [{
+    key: \\"render\\",
+    value: function render() {
+      const _child = (0, _hooks.default)(Inner, {
+        x: this.props.x
+      });
+
+      return _context => {
+        if (_context._ !== _instructions) {
+          if (_context.$) _context.$();
+
+          _context.$ = () => {
+            (0, _unmountInternal.default)(_context.b_);
+          };
+
+          _context._ = _instructions;
+          _context.a = (0, _createElement.default)(\\"div\\");
+          (0, _renderInternal.default)(_context, _child, \\"b\\", 1);
+          (0, _renderChildren.default)(_context.a, [_context[\\"b\\"]]);
+        } else {
+          (0, _renderInternal.default)(_context, _child, \\"b\\", 0);
+        }
+
+        return _context.a;
+      };
+    }
+  }]);
+
+  return Outer;
+}(React.Component);
+
+exports.Outer = Outer;
+
+var Inner =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(Inner, _React$Component2);
+
+  function Inner() {
+    var _this2;
+
+    _classCallCheck(this, Inner);
+
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Inner).call(this));
+    _this2.UNSAFE_componentWillMount = logger('inner componentWillMount');
+    _this2.componentDidMount = logger('inner componentDidMount');
+    _this2.UNSAFE_componentWillReceiveProps = logger('inner componentWillReceiveProps');
+    _this2.shouldComponentUpdate = logger('inner shouldComponentUpdate');
+    _this2.UNSAFE_componentWillUpdate = logger('inner componentWillUpdate');
+    _this2.componentDidUpdate = logger('inner componentDidUpdate');
+    _this2.componentWillUnmount = logger('inner componentWillUnmount');
+    return _this2;
+  }
+
+  _createClass(Inner, [{
+    key: \\"render\\",
+    value: function render() {
+      const _child2 = this.props.x;
+      return _context2 => {
+        if (_context2._ !== _instructions2) {
+          if (_context2.$) _context2.$();
+
+          _context2.$ = () => {
+            (0, _unmountInternal.default)(_context2.b_);
+          };
+
+          _context2._ = _instructions2;
+          _context2.a = (0, _createElement.default)(\\"span\\");
+          (0, _renderInternal.default)(_context2, _child2, \\"b\\", 1);
+          (0, _renderChildren.default)(_context2.a, [_context2[\\"b\\"]]);
+        } else {
+          (0, _renderInternal.default)(_context2, _child2, \\"b\\", 0);
+        }
+
+        return _context2.a;
+      };
+    }
+  }]);
+
+  return Inner;
+}(React.Component);"
+`;
+
 exports[`integration should compile state 1`] = `
 "\\"use strict\\";
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`state renders correctly 1`] = `
+exports[`state renders correctly each time state changes 1`] = `
 <p>
   Hello 
   world
@@ -9,7 +9,7 @@ exports[`state renders correctly 1`] = `
 </p>
 `;
 
-exports[`state renders correctly 2`] = `
+exports[`state renders correctly each time state changes 2`] = `
 <p>
   Hello 
   world
@@ -18,7 +18,7 @@ exports[`state renders correctly 2`] = `
 </p>
 `;
 
-exports[`state renders correctly 3`] = `
+exports[`state renders correctly each time state changes 3`] = `
 <p>
   Hello 
   world
