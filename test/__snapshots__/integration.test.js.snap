@@ -6,7 +6,7 @@ exports[`integration should compile basic 1`] = `
 Object.defineProperty(exports, \\"__esModule\\", {
   value: true
 });
-exports.default = void 0;
+exports.HelloWorld = exports.Hello = void 0;
 
 var _createElement = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createElement\\"));
 
@@ -19,8 +19,6 @@ var _renderChildren = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/
 var _hooks = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/hooks\\"));
 
 var React = _interopRequireWildcard(require(\\"babel-plugin-rawact/lib/runtime/react\\"));
-
-var ReactDOM = React;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -52,7 +50,9 @@ var Hello = function Hello(_ref) {
   };
 };
 
-var _default = function _default() {
+exports.Hello = Hello;
+
+var HelloWorld = function HelloWorld() {
   const _child2 = (0, _hooks.default)(Hello, {
     name: \\"World\\"
   });
@@ -78,5 +78,5 @@ var _default = function _default() {
   };
 };
 
-exports.default = _default;"
+exports.HelloWorld = HelloWorld;"
 `;

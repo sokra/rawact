@@ -15,3 +15,13 @@ exports[`basic renders correctly 1`] = `
   </div>
 </div>
 `;
+
+exports[`basic renders updates from outside 1`] = `
+<div>
+  <p>
+    Hello 
+    world
+    !
+  </p>
+</div>
+`;

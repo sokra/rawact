@@ -1,8 +1,8 @@
 import React from "react";
 
-const Hello = ({ name }) => <p>Hello {name}!</p>;
+export const Hello = ({ name }) => <p>Hello {name}!</p>;
 
-export default () => {
+export const HelloWorld = () => {
 	return (
 		<div title={"hello"}>
 			<Hello name="World" />
