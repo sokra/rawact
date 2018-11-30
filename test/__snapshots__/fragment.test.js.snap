@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fragments renders correctly 1`] = `
+Array [
+  Hello ,
+  world,
+  !,
+]
+`;

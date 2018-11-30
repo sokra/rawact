@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`classes pure components protect multiple re-renders 1`] = `
+<p>
+  Hi to 
+  world
+   x
+  1
+</p>
+`;
+
+exports[`classes pure components protect multiple re-renders 2`] = `
+<p>
+  Hi to 
+  me
+   x
+  2
+</p>
+`;
+
+exports[`classes renders correctly 1`] = `
+<p>
+  Hello 
+  world
+  !
+</p>
+`;

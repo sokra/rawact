@@ -1,23 +1,21 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import * as Basic from './cases/basic';
+import renderHelper from './renderHelper';
 
 describe('basic', () => {
 	it('renders correctly', () => {
-		const element = document.createElement('div');
+		const { element, rendered } = renderHelper(<Basic.HelloWorld/>);
 
-		const elementRendered = ReactDOM.render(<Basic.HelloWorld/>, element);
-
-		expect(element).toMatchSnapshot();
-		expect(elementRendered).toEqual(element.childNodes[0]);
+		expect(rendered).toMatchSnapshot();
+		expect(rendered).toEqual(element.childNodes[0]);
 	});
 
 	it('renders updates from render', () => {
-		const element = document.createElement('div');
+		const { element } = renderHelper(<Basic.Hello name="testing"/>);
 
-		ReactDOM.render(<Basic.Hello name="testing"/>, element);
-		ReactDOM.render(<Basic.Hello name="world"/>, element);
+		const rendered = ReactDOM.render(<Basic.Hello name="world"/>, element);
 
-		expect(element).toMatchSnapshot();
+		expect(rendered).toMatchSnapshot();
 	});
 });
