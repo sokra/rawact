@@ -11,4 +11,5 @@ export default (element, parentNode) => {
 	const node = context.node;
 	if (node.parentElement !== parentNode) parentNode.appendChild(node);
 	runEffects();
+	return node;
 };

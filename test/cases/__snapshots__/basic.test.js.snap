@@ -10,7 +10,8 @@ exports[`basic renders correctly 1`] = `
       World
       !
     </p>
-    !!
+    !
+    !
   </div>
 </div>
 `;

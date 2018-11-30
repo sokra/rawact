@@ -1,4 +1,5 @@
 module.exports = {
+	presets: [["@babel/preset-env", { targets: "maintained node versions" }]],
 	overrides: [
 		{
 			include: "./src/runtime",
@@ -9,21 +10,22 @@ module.exports = {
 						modules: false,
 						targets: {
 							esmodules: true
-						}
+						},
+						loose: true,
+						spec: false,
 					},
 				],
-				"@babel/preset-env"
 			]
 		},
 		{
-			include: ["./test", "./lib"],
+			include: ["./test", "./lib/runtime"],
 			presets: [
 					["@babel/preset-env", {
 						modules: 'cjs',
 					}],
 					"@babel/preset-react"
 			],
-			plugins: [require("./")]
+			plugins: ["./"]
 		}
 	]
 };

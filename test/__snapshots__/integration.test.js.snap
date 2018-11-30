@@ -64,7 +64,7 @@ var Wrapped = function Wrapped() {
       _context2.a = (0, _createElement.default)(\\"div\\");
       _context2.a.title = \\"hello\\";
       (0, _renderInternal.default)(_context2, _child2, \\"b\\", 1);
-      (0, _renderChildren.default)(_context2.a, [_context2[\\"b\\"], \\"!!\\"]);
+      (0, _renderChildren.default)(_context2.a, [_context2[\\"b\\"], \\"!\\", '!']);
     } else {
       (0, _renderInternal.default)(_context2, _child2, \\"b\\", 0);
     }
@@ -76,8 +76,9 @@ var Wrapped = function Wrapped() {
 describe('basic', function () {
   it('renders correctly', function () {
     var element = document.createElement('div');
-    var component = ReactDOM.render((0, _hooks.default)(Wrapped, {}), element);
+    var elementRendered = ReactDOM.render((0, _hooks.default)(Wrapped, {}), element);
     expect(element).toMatchSnapshot();
+    expect(elementRendered).toEqual(element.childNodes[0]);
   });
 });"
 `;
