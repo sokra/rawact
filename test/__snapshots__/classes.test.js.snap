@@ -25,3 +25,11 @@ exports[`classes renders correctly 1`] = `
   !
 </p>
 `;
+
+exports[`classes unmounts when changing componnt 1`] = `
+<div>
+  <div>
+    No class any more
+  </div>
+</div>
+`;

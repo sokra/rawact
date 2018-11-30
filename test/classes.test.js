@@ -20,4 +20,20 @@ describe('classes', () => {
 		rendered = ReactDOM.render(<Classes.RenderCountingPure name="me"/>, element);
 		expect(rendered).toMatchSnapshot();
 	});
+
+	xit('unmounts', () => {
+		const { element } = renderHelper(<Classes.Hello name="world"/>);
+
+		ReactDOM.unmountComponentAtNode(element);
+
+		expect(rendered).toMatchSnapshot();
+	});
+
+	it('unmounts when changing componnt', () => {
+		const { element } = renderHelper(<Classes.Hello name="world"/>);
+
+		ReactDOM.render(<div>No class any more</div>, element);
+
+		expect(element).toMatchSnapshot();
+	});
 });

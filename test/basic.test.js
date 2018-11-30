@@ -18,4 +18,12 @@ describe('basic', () => {
 
 		expect(rendered).toMatchSnapshot();
 	});
+
+	xit('unmounts', () => {
+		const { element } = renderHelper(<Basic.Hello name="testing"/>);
+
+		ReactDOM.unmountComponentAtNode(element);
+
+		expect(rendered).toMatchSnapshot();
+	});
 });
