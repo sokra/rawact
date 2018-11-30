@@ -223,13 +223,19 @@ exports[`integration should compile fragment 1`] = `
 Object.defineProperty(exports, \\"__esModule\\", {
   value: true
 });
-exports.Hello = void 0;
+exports.ChangingChildrenElement = exports.ChangingChildren = exports.GoodBye = exports.Hello = void 0;
 
 var _renderInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderInternal\\"));
 
 var _unmountInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/unmountInternal\\"));
 
 var _createFragment = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createFragment\\"));
+
+var _createElement = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createElement\\"));
+
+var _renderChildren = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderChildren\\"));
+
+var _hooks = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/hooks\\"));
 
 var React = _interopRequireWildcard(require(\\"babel-plugin-rawact/lib/runtime/react\\"));
 
@@ -238,6 +244,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _instructions = {};
+var _instructions2 = {};
+var _instructions3 = {};
+var _instructions4 = {};
+var _instructions5 = {};
+var _instructions6 = {};
+var _instructions7 = {};
 
 var Hello = function Hello(_ref) {
   var name = _ref.name;
@@ -262,5 +274,113 @@ var Hello = function Hello(_ref) {
   };
 };
 
-exports.Hello = Hello;"
+exports.Hello = Hello;
+
+var GoodBye = function GoodBye(_ref2) {
+  var name = _ref2.name;
+  const _child2 = name;
+  return _context2 => {
+    if (_context2._ !== _instructions2) {
+      if (_context2.$) _context2.$();
+
+      _context2.$ = () => {
+        (0, _unmountInternal.default)(_context2.c_);
+      };
+
+      _context2._ = _instructions2;
+      _context2.b = (0, _createElement.default)(\\"b\\");
+      (0, _renderChildren.default)(_context2.b, [\\"B\\"]);
+      (0, _renderInternal.default)(_context2, _child2, \\"c\\", 1);
+      _context2.a = (0, _createFragment.default)([\\"Good\\", _context2.b, \\"ye \\", _context2[\\"c\\"], \\"!\\"]);
+    } else {
+      (0, _renderInternal.default)(_context2, _child2, \\"c\\", 0);
+      _context2.a[3] = _context2[\\"c\\"];
+    }
+
+    return _context2.a;
+  };
+};
+
+exports.GoodBye = GoodBye;
+
+var ChangingChildren = function ChangingChildren(_ref3) {
+  var type = _ref3.type,
+      name = _ref3.name;
+  var children = [type === 'hello' ? (0, _hooks.default)(Hello, {
+    name: name
+  }) : (0, _hooks.default)(GoodBye, {
+    name: name
+  })];
+
+  if (type === 'goodbye') {
+    children.push('(and sorry)');
+  }
+
+  const _child3 = children;
+  return _context4 => {
+    if (_context4._ !== _instructions4) {
+      if (_context4.$) _context4.$();
+
+      _context4.$ = () => {
+        (0, _unmountInternal.default)(_context4.b_);
+      };
+
+      _context4._ = _instructions4;
+      (0, _renderInternal.default)(_context4, _child3, \\"b\\", 1);
+      _context4.a = (0, _createFragment.default)([_context4[\\"b\\"]]);
+    } else {
+      (0, _renderInternal.default)(_context4, _child3, \\"b\\", 0);
+      _context4.a[0] = _context4[\\"b\\"];
+    }
+
+    return _context4.a;
+  };
+};
+
+exports.ChangingChildren = ChangingChildren;
+
+var ChangingChildrenElement = function ChangingChildrenElement(_ref4) {
+  var isDiv = _ref4.isDiv;
+
+  const _child4 = isDiv ? _context6 => {
+    if (_context6._ !== _instructions6) {
+      if (_context6.$) _context6.$();
+      _context6.$ = null;
+      _context6._ = _instructions6;
+      _context6.a = (0, _createElement.default)(\\"div\\");
+    } else {}
+
+    return _context6.a;
+  } : _context7 => {
+    if (_context7._ !== _instructions7) {
+      if (_context7.$) _context7.$();
+      _context7.$ = null;
+      _context7._ = _instructions7;
+      _context7.a = (0, _createElement.default)(\\"span\\");
+    } else {}
+
+    return _context7.a;
+  };
+
+  return _context5 => {
+    if (_context5._ !== _instructions5) {
+      if (_context5.$) _context5.$();
+
+      _context5.$ = () => {
+        (0, _unmountInternal.default)(_context5.b_);
+      };
+
+      _context5._ = _instructions5;
+      (0, _renderInternal.default)(_context5, _child4, \\"b\\", 1);
+      _context5.a = (0, _createFragment.default)([\\"Testing...\\", _context5[\\"b\\"]]);
+    } else {
+      (0, _renderInternal.default)(_context5, _child4, \\"b\\", 0);
+      _context5.a[1] = _context5[\\"b\\"];
+    }
+
+    return _context5.a;
+  };
+};
+
+exports.ChangingChildrenElement = ChangingChildrenElement;"
 `;

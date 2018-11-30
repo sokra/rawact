@@ -19,6 +19,9 @@ export default (oldNodes, newNodes) => {
 	oldNodes = toArray(oldNodes);
 	newNodes = toArray(newNodes);
 	const parentNode = oldNodes[0].parentNode;
+	if (!parentNode) {
+		return;
+	}
 	const nextOne = oldNodes[oldNodes.length - 1].nextSibling;
 	if (!nextOne && parentNode.firstChild === oldNodes[0]) {
 		// replaced whole parent: take shortcut to clear nodes here
