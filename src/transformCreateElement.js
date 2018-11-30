@@ -165,7 +165,6 @@ const createNativeElement = (element, scope) => {
 			);
 		}
 	} else {
-		console.log(element);
 		throw new Error(`Unsupported element kind ${element.kind}`);
 	}
 

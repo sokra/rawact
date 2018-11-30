@@ -127,14 +127,12 @@ export default declare(api => {
 						},
 						this
 					);
+					for (const global of this.globals.reverse())
+						path.unshiftContainer("body", global);
+					for (const imp of this.imports.reverse())
+						path.unshiftContainer("body", imp);
 				}
 			}
 		},
-		post(state) {
-			for (const global of this.globals.reverse())
-				state.path.unshiftContainer("body", global);
-			for (const imp of this.imports.reverse())
-				state.path.unshiftContainer("body", imp);
-		}
 	};
 });

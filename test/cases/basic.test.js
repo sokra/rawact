@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 const Hello = ({ name }) => <p>Hello {name}!</p>;
 

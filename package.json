@@ -11,6 +11,18 @@
     "start": "npm run prepublishOnly -- -w",
     "test": "npm run prepublishOnly && jest"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^babel-plugin-rawact/(.*)$": "<rootDir>/$1"
+    }
+  },
   "files": [
     "lib"
   ],
@@ -22,6 +34,7 @@
     "@babel/cli": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
     "jest": "^23.6.0",
     "rimraf": "^2.6.2"
   }

@@ -1,43 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration should compile basic 1`] = `
-"import _rawact_createElement from \\"babel-plugin-rawact/lib/runtime/createElement\\";
-import _rawact_renderInternal from \\"babel-plugin-rawact/lib/runtime/renderInternal\\";
-import _rawact_unmountInternal from \\"babel-plugin-rawact/lib/runtime/unmountInternal\\";
-import _rawact_renderChildren from \\"babel-plugin-rawact/lib/runtime/renderChildren\\";
-import _rawact_hooks from \\"babel-plugin-rawact/lib/runtime/hooks\\";
-const _instructions = {};
-const _instructions2 = {};
-import * as React from \\"babel-plugin-rawact/lib/runtime/react\\";
+exports[`integration should compile basic.test 1`] = `
+"\\"use strict\\";
 
-const Hello = ({
-  name
-}) => (() => {
+var _createElement = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createElement\\"));
+
+var _renderInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderInternal\\"));
+
+var _unmountInternal = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/unmountInternal\\"));
+
+var _renderChildren = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/renderChildren\\"));
+
+var _hooks = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/hooks\\"));
+
+var React = _interopRequireWildcard(require(\\"babel-plugin-rawact/lib/runtime/react\\"));
+
+var ReactDOM = React;
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _instructions = {};
+var _instructions2 = {};
+
+var Hello = function Hello(_ref) {
+  var name = _ref.name;
   const _child = name;
   return _context => {
     if (_context._ !== _instructions) {
       if (_context.$) _context.$();
 
       _context.$ = () => {
-        _rawact_unmountInternal(_context.b_);
+        (0, _unmountInternal.default)(_context.b_);
       };
 
       _context._ = _instructions;
-      _context.a = _rawact_createElement(\\"p\\");
-
-      _rawact_renderInternal(_context, _child, \\"b\\", 1);
-
-      _rawact_renderChildren(_context.a, [\\"Hello \\", _context[\\"b\\"], \\"!\\"]);
+      _context.a = (0, _createElement.default)(\\"p\\");
+      (0, _renderInternal.default)(_context, _child, \\"b\\", 1);
+      (0, _renderChildren.default)(_context.a, [\\"Hello \\", _context[\\"b\\"], \\"!\\"]);
     } else {
-      _rawact_renderInternal(_context, _child, \\"b\\", 0);
+      (0, _renderInternal.default)(_context, _child, \\"b\\", 0);
     }
 
     return _context.a;
   };
-})();
+};
 
-export default (() => {
-  const _child2 = _rawact_hooks(Hello, {
+var Wrapped = function Wrapped() {
+  const _child2 = (0, _hooks.default)(Hello, {
     name: \\"World\\"
   });
 
@@ -46,21 +57,27 @@ export default (() => {
       if (_context2.$) _context2.$();
 
       _context2.$ = () => {
-        _rawact_unmountInternal(_context2.b_);
+        (0, _unmountInternal.default)(_context2.b_);
       };
 
       _context2._ = _instructions2;
-      _context2.a = _rawact_createElement(\\"div\\");
+      _context2.a = (0, _createElement.default)(\\"div\\");
       _context2.a.title = \\"hello\\";
-
-      _rawact_renderInternal(_context2, _child2, \\"b\\", 1);
-
-      _rawact_renderChildren(_context2.a, [_context2[\\"b\\"], \\"!!\\"]);
+      (0, _renderInternal.default)(_context2, _child2, \\"b\\", 1);
+      (0, _renderChildren.default)(_context2.a, [_context2[\\"b\\"], \\"!!\\"]);
     } else {
-      _rawact_renderInternal(_context2, _child2, \\"b\\", 0);
+      (0, _renderInternal.default)(_context2, _child2, \\"b\\", 0);
     }
 
     return _context2.a;
   };
+};
+
+describe('basic', function () {
+  it('renders correctly', function () {
+    var element = document.createElement('div');
+    var component = ReactDOM.render((0, _hooks.default)(Wrapped, {}), element);
+    expect(element).toMatchSnapshot();
+  });
 });"
 `;
