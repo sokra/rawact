@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`state renders correctly 1`] = `
+<p>
+  Hello 
+  world
+  ! Called x
+  1
+</p>
+`;
+
+exports[`state renders correctly 2`] = `
+<p>
+  Hello 
+  world
+  ! Called x
+  2
+</p>
+`;
+
+exports[`state renders correctly 3`] = `
+<p>
+  Hello 
+  world
+  ! Called x
+  3
+</p>
+`;
