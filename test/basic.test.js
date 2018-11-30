@@ -1,17 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-const Hello = ({ name }) => <p>Hello {name}!</p>;
-
-const Wrapped = () => {
-	return (
-		<div title={"hello"}>
-			<Hello name="World" />
-			!
-			{'!'}
-		</div>
-	);
-};
+import Wrapped from './cases/basic';
 
 describe('basic', () => {
 	it('renders correctly', () => {

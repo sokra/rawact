@@ -1,7 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration should compile basic.test 1`] = `
+exports[`integration should compile basic 1`] = `
 "\\"use strict\\";
+
+Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
+exports.default = void 0;
 
 var _createElement = _interopRequireDefault(require(\\"babel-plugin-rawact/lib/runtime/createElement\\"));
 
@@ -47,7 +52,7 @@ var Hello = function Hello(_ref) {
   };
 };
 
-var Wrapped = function Wrapped() {
+var _default = function _default() {
   const _child2 = (0, _hooks.default)(Hello, {
     name: \\"World\\"
   });
@@ -73,12 +78,5 @@ var Wrapped = function Wrapped() {
   };
 };
 
-describe('basic', function () {
-  it('renders correctly', function () {
-    var element = document.createElement('div');
-    var elementRendered = ReactDOM.render((0, _hooks.default)(Wrapped, {}), element);
-    expect(element).toMatchSnapshot();
-    expect(elementRendered).toEqual(element.childNodes[0]);
-  });
-});"
+exports.default = _default;"
 `;
