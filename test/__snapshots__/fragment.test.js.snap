@@ -23,7 +23,6 @@ exports[`fragments rendering at the top removes children 1`] = `
 
 exports[`fragments rendering at the top removes non react children 1`] = `
 <div>
-  Test
   Hello 
   world
   !
