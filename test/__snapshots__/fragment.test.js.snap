@@ -23,9 +23,11 @@ exports[`fragments rendering at the top removes children 1`] = `
 
 exports[`fragments rendering at the top removes non react children 1`] = `
 <div>
-  Hello 
-  world
-  !
+  This
+  <span>
+    Rogue
+  </span>
+  Test
 </div>
 `;
 
@@ -40,7 +42,7 @@ exports[`fragments rendering at the top renders correctly 1`] = `
 exports[`fragments rendering at the top updates correctly 1`] = `
 <div>
   Hello 
-  me
+  world
   !
 </div>
 `;
@@ -48,26 +50,11 @@ exports[`fragments rendering at the top updates correctly 1`] = `
 exports[`fragments rendering at the top updates correctly, changing a child 1`] = `
 <div>
   Testing...
-  <div />
+  <span />
 </div>
 `;
 
 exports[`fragments rendering under an element adds new children 1`] = `
-<div>
-  <div>
-    Good
-    <b>
-      B
-    </b>
-    ye 
-    me
-    !
-    (and sorry)
-  </div>
-</div>
-`;
-
-exports[`fragments rendering under an element moves down 1`] = `
 <div>
   <div>
     Hello 
@@ -77,7 +64,7 @@ exports[`fragments rendering under an element moves down 1`] = `
 </div>
 `;
 
-exports[`fragments rendering under an element moves up 1`] = `
+exports[`fragments rendering under an element moves down 1`] = `
 <div>
   Hello 
   world
@@ -85,12 +72,27 @@ exports[`fragments rendering under an element moves up 1`] = `
 </div>
 `;
 
-exports[`fragments rendering under an element removes children 1`] = `
+exports[`fragments rendering under an element moves up 1`] = `
 <div>
   <div>
     Hello 
-    me
+    world
     !
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element removes children 1`] = `
+<div>
+  <div>
+    Good
+    <b>
+      B
+    </b>
+    ye 
+    world
+    !
+    (and sorry)
   </div>
 </div>
 `;
@@ -109,7 +111,7 @@ exports[`fragments rendering under an element updates correctly 1`] = `
 <div>
   <div>
     Hello 
-    me
+    world
     !
   </div>
 </div>
@@ -119,7 +121,7 @@ exports[`fragments rendering under an element updates correctly, changing a chil
 <div>
   <div>
     Testing...
-    <div />
+    <span />
   </div>
 </div>
 `;

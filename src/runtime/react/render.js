@@ -3,7 +3,7 @@ import renderInternal from "../renderInternal";
 import replaceNode, { toArray } from "../replaceNode";
 
 const map = new WeakMap();
-export default (element, parentNode) => {
+export default (element, parentNode, callback) => {
 	let context = map.get(parentNode);
 	if (!context) {
 		map.set(parentNode, (context = { $$: { node: parentNode } }));
@@ -19,10 +19,11 @@ export default (element, parentNode) => {
 				parentNode.appendChild(newNodes[i]);
 			}
 		}
-		node = parentNode.childNodes[0];
 	} else {
 		if (node.parentElement !== parentNode) parentNode.appendChild(node);
 	}
 	runEffects();
-	return node;
+  if (callback) {
+  	callback();
+	}
 };

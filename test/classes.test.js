@@ -23,38 +23,35 @@ class RenderCountingPure extends React.PureComponent {
 }
 
 describe("classes", () => {
-	it("renders correctly", () => {
-		const { rendered } = renderHelper(<Hello name="world" />);
+	it("renders correctly", async () => {
+		const element = await renderHelper(<Hello name="world" />);
 
-		expect(rendered).toMatchSnapshot();
+		expect(element).toMatchSnapshot();
 	});
 
-	it("pure components protect multiple re-renders", () => {
-		const { element } = renderHelper(<RenderCountingPure name="world" />);
+	it("pure components protect multiple re-renders", async () => {
+		const element = await renderHelper(<RenderCountingPure name="world" />);
 
-		ReactDOM.render(<RenderCountingPure name="world" />, element);
-		let rendered = ReactDOM.render(
-			<RenderCountingPure name="world" />,
-			element
-		);
-		expect(rendered).toMatchSnapshot();
+		renderHelper(<RenderCountingPure name="world" />, element);
+		renderHelper(<RenderCountingPure name="world" />, element);
+		expect(element).toMatchSnapshot();
 
-		rendered = ReactDOM.render(<RenderCountingPure name="me" />, element);
-		expect(rendered).toMatchSnapshot();
+		renderHelper(<RenderCountingPure name="me" />, element);
+		expect(element).toMatchSnapshot();
 	});
 
-	xit("unmounts", () => {
-		const { element } = renderHelper(<Hello name="world" />);
+	xit("unmounts", async () => {
+		const element = await renderHelper(<Hello name="world" />);
 
 		ReactDOM.unmountComponentAtNode(element);
 
-		expect(rendered).toMatchSnapshot();
+		expect(element).toMatchSnapshot();
 	});
 
-	it("unmounts when changing componnt", () => {
-		const { element } = renderHelper(<Hello name="world" />);
+	it("unmounts when changing componnt", async () => {
+		const element = await renderHelper(<Hello name="world" />);
 
-		ReactDOM.render(<div>No class any more</div>, element);
+		renderHelper(<div>No class any more</div>, element);
 
 		expect(element).toMatchSnapshot();
 	});

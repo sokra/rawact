@@ -51,14 +51,14 @@ class Inner extends React.Component {
 
 describe("lifecycle", () => {
 	// TODO: test disabled because they occur in the wrong order
-	xit("calls in the right outer", () => {
-		const { element } = renderHelper(<Outer x={1} />);
+	xit("calls in the right outer", async () => {
+		const element = await renderHelper(<Outer x={1} />);
 		expect(getLogMessages()).toEqual([
 			"inner componentDidMount",
 			"outer componentDidMount"
 		]);
 
-		ReactDOM.render(<Outer x={2} />, element);
+		renderHelper(<Outer x={2} />, element);
 		expect(getLogMessages()).toEqual([
 			"outer shouldComponentUpdate",
 			"inner shouldComponentUpdate",
@@ -68,7 +68,7 @@ describe("lifecycle", () => {
 
 		// TODO - when unmount is supported
 		// ReactDOM.unmountComponentAtNode(container);
-		ReactDOM.render(<div />, element);
+		renderHelper(<div />, element);
 
 		expect(getLogMessages()).toEqual([
 			"outer componentWillUnmount",

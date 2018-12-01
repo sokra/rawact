@@ -9,7 +9,10 @@
   "scripts": {
     "prepublishOnly": "rimraf lib && babel src -d lib",
     "start": "npm run prepublishOnly -- -w",
-    "test": "npm run prepublishOnly && jest"
+    "test": "npm run prepublishOnly && npm run test-react && npm run test-rawact",
+    "//": "--no-cache can be removed when jest 24 is released which includes BABEL_ENV in the cache key",
+    "test-rawact": "cross-env BABEL_ENV=test-rawact jest --no-cache",
+    "test-react": "cross-env BABEL_ENV=test-react jest --no-cache"
   },
   "jest": {
     "moduleNameMapper": {
@@ -27,7 +30,11 @@
     "@babel/cli": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "cross-env": "^5.2.0",
     "jest": "^23.6.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "rimraf": "^2.6.2"
   }
 }

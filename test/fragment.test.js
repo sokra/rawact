@@ -11,7 +11,11 @@ const GoodBye = ({ name }) => (
 
 const ChangingChildren = ({ type, name }) => {
 	const children = [
-		type === "hello" ? <Hello name={name} /> : <GoodBye name={name} />
+		type === "hello" ? (
+			<Hello name={name} key="hello" />
+		) : (
+			<GoodBye name={name} key="bye" />
+		)
 	];
 	if (type === "goodbye") {
 		children.push("(and sorry)");
@@ -30,64 +34,64 @@ const ChangingChildrenElement = ({ isDiv }) => {
 
 describe("fragments", () => {
 	describe("rendering at the top", () => {
-		it("renders correctly", () => {
-			const { element } = renderHelper(<Hello name="world" />);
+		it("renders correctly", async () => {
+			const element = await renderHelper(<Hello name="world" />);
 
 			expect(element).toMatchSnapshot();
 		});
 
-		it("updates correctly", () => {
-			const { element } = renderHelper(<Hello name="world" />);
+		it("updates correctly", async () => {
+			const element = await renderHelper(<Hello name="world" />);
 
-			ReactDOM.render(<Hello name="me" />, element);
+			renderHelper(<Hello name="me" />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 
-		it("updates correctly, changing a child", () => {
-			const { element } = renderHelper(
+		it("updates correctly, changing a child", async () => {
+			const element = await renderHelper(
 				<ChangingChildrenElement isDiv={false} />
 			);
 
-			ReactDOM.render(<ChangingChildrenElement isDiv />, element);
+			renderHelper(<ChangingChildrenElement isDiv />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 
 		// TODO - null reference exception in replaceNode
-		xit("adds new children", () => {
-			const { element } = renderHelper(
+		xit("adds new children", async () => {
+			const element = await renderHelper(
 				<ChangingChildren name="world" type="hello" />
 			);
 
-			ReactDOM.render(<ChangingChildren name="me" type="goodbye" />, element);
+			renderHelper(<ChangingChildren name="me" type="goodbye" />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 
 		// TODO - null reference exception in replaceNode
-		xit("removes children", () => {
-			const { element } = renderHelper(
+		xit("removes children", async () => {
+			const element = await renderHelper(
 				<ChangingChildren name="world" type="goodbye" />
 			);
 
-			ReactDOM.render(<ChangingChildren name="me" type="hello" />, element);
+			renderHelper(<ChangingChildren name="me" type="hello" />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 
-		it("removes non react children", () => {
+		it("removes non react children", async () => {
 			const element = document.createElement("div");
 			element.innerHTML = "This<span>Rogue</span>Test";
-			ReactDOM.render(<Hello name="world" />, element);
+			renderHelper(<Hello name="world" />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 	});
 
 	describe("rendering under an element", () => {
-		it("renders correctly", () => {
-			const { element } = renderHelper(
+		it("renders correctly", async () => {
+			const element = await renderHelper(
 				<div>
 					<Hello name="world" />
 				</div>
@@ -96,14 +100,14 @@ describe("fragments", () => {
 			expect(element).toMatchSnapshot();
 		});
 
-		it("updates correctly", () => {
-			const { element } = renderHelper(
+		it("updates correctly", async () => {
+			const element = await renderHelper(
 				<div>
 					<Hello name="world" />
 				</div>
 			);
 
-			ReactDOM.render(
+			renderHelper(
 				<div>
 					<Hello name="me" />
 				</div>,
@@ -113,14 +117,14 @@ describe("fragments", () => {
 			expect(element).toMatchSnapshot();
 		});
 
-		it("updates correctly, changing a child", () => {
-			const { element } = renderHelper(
+		it("updates correctly, changing a child", async () => {
+			const element = await renderHelper(
 				<div>
 					<ChangingChildrenElement isDiv={false} />
 				</div>
 			);
 
-			ReactDOM.render(
+			renderHelper(
 				<div>
 					<ChangingChildrenElement isDiv />
 				</div>,
@@ -130,14 +134,14 @@ describe("fragments", () => {
 			expect(element).toMatchSnapshot();
 		});
 
-		it("adds new children", () => {
-			const { element } = renderHelper(
+		it("adds new children", async () => {
+			const element = await renderHelper(
 				<div>
 					<ChangingChildren name="world" type="hello" />
 				</div>
 			);
 
-			ReactDOM.render(
+			renderHelper(
 				<div>
 					<ChangingChildren name="me" type="goodbye" />
 				</div>,
@@ -147,14 +151,14 @@ describe("fragments", () => {
 			expect(element).toMatchSnapshot();
 		});
 
-		it("removes children", () => {
-			const { element } = renderHelper(
+		it("removes children", async () => {
+			const element = await renderHelper(
 				<div>
 					<ChangingChildren name="world" type="goodbye" />
 				</div>
 			);
 
-			ReactDOM.render(
+			renderHelper(
 				<div>
 					<ChangingChildren name="me" type="hello" />
 				</div>,
@@ -164,22 +168,22 @@ describe("fragments", () => {
 			expect(element).toMatchSnapshot();
 		});
 
-		it("moves up", () => {
-			const { element } = renderHelper(
+		it("moves up", async () => {
+			const element = await renderHelper(
 				<div>
 					<Hello name="world" />
 				</div>
 			);
 
-			ReactDOM.render(<Hello name="world" />, element);
+			renderHelper(<Hello name="world" />, element);
 
 			expect(element).toMatchSnapshot();
 		});
 
-		it("moves down", () => {
-			const { element } = renderHelper(<Hello name="world" />);
+		it("moves down", async () => {
+			const element = await renderHelper(<Hello name="world" />);
 
-			ReactDOM.render(
+			renderHelper(
 				<div>
 					<Hello name="world" />
 				</div>,

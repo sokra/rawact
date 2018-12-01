@@ -1,4 +1,25 @@
 module.exports = {
+	"env": {
+		"test-rawact": {
+			include: ["./test", "./lib/runtime"],
+			presets: [
+				["@babel/preset-env", {
+					modules: 'cjs',
+				}],
+				"@babel/preset-react"
+			],
+			plugins: ["./"]
+		},
+		"test-react": {
+			include: ["./test", "./lib/runtime"],
+			presets: [
+				["@babel/preset-env", {
+					modules: 'cjs',
+				}],
+				"@babel/preset-react"
+			],
+		},
+	},
 	presets: [["@babel/preset-env", { targets: "maintained node versions" }]],
 	overrides: [
 		{
@@ -11,21 +32,9 @@ module.exports = {
 						targets: {
 							esmodules: true
 						},
-						loose: true,
-						spec: false,
 					},
 				],
 			]
-		},
-		{
-			include: ["./test", "./lib/runtime"],
-			presets: [
-					["@babel/preset-env", {
-						modules: 'cjs',
-					}],
-					"@babel/preset-react"
-			],
-			plugins: ["./"]
 		}
 	]
 };

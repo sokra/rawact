@@ -41,18 +41,18 @@ class Hello extends React.Component {
 
 describe("state", () => {
 	it("renders correctly each time state changes", async () => {
-		const { rendered } = renderHelper(<Hello name="world" />);
+		const element = await renderHelper(<Hello name="world" />);
 
-		expect(rendered).toMatchSnapshot();
-
-		runTick();
-		await Promise.resolve();
-
-		expect(rendered).toMatchSnapshot();
+		expect(element).toMatchSnapshot();
 
 		runTick();
 		await Promise.resolve();
 
-		expect(rendered).toMatchSnapshot();
+		expect(element).toMatchSnapshot();
+
+		runTick();
+		await Promise.resolve();
+
+		expect(element).toMatchSnapshot();
 	});
 });

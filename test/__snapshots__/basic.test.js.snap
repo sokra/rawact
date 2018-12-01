@@ -1,23 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`basic renders correctly 1`] = `
-<div
-  title="hello"
->
-  <p>
-    Hello 
-    World
+<div>
+  <div
+    title="hello"
+  >
+    <p>
+      Hello 
+      World
+      !
+    </p>
     !
-  </p>
-  !
-  !
+    !
+  </div>
 </div>
 `;
 
 exports[`basic renders updates from render 1`] = `
-<p>
-  Hello 
-  world
-  !
-</p>
+<div>
+  <p>
+    Hello 
+    testing
+    !
+  </p>
+</div>
 `;

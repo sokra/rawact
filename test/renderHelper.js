@@ -1,8 +1,10 @@
 import ReactDOM from "react-dom";
 
-export default toRender => {
-	const element = document.createElement("div");
-	const rendered = ReactDOM.render(toRender, element);
-
-	return { element, rendered };
+export default (toRender, element) => {
+	return new Promise(resolve => {
+		const element = element || document.createElement("div");
+		ReactDOM.render(toRender, element, () => {
+			resolve(element);
+		});
+	});
 };
