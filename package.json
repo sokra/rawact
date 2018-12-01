@@ -8,8 +8,8 @@
   "sideEffects": false,
   "scripts": {
     "prepublishOnly": "rimraf lib && babel src -d lib",
-    "start": "rimraf lib && babel src -d lib -w",
-    "test": "jest"
+    "start": "npm run prepublishOnly -- -w",
+    "test": "npm run prepublishOnly && jest"
   },
   "files": [
     "lib"
