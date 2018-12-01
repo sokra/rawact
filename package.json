@@ -12,13 +12,6 @@
     "test": "npm run prepublishOnly && jest"
   },
   "jest": {
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "testEnvironment": "jsdom",
     "moduleNameMapper": {
       "^babel-plugin-rawact/(.*)$": "<rootDir>/$1"
     }
