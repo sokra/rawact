@@ -133,6 +133,6 @@ export default declare(api => {
 						path.unshiftContainer("body", imp);
 				}
 			}
-		},
+		}
 	};
 });
