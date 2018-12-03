@@ -1,5 +1,8 @@
 # babel-plugin-rawact
 
+[![Backers on Open Collective](https://opencollective.com/rawact/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/rawact/sponsors/badge.svg)](#sponsors) 
+
 A babel plugin which compiles React.js components into native DOM instructions to eliminate the need for the react library at runtime.
 
 ## Motivation
@@ -582,3 +585,33 @@ ReactDOM.render(<Counter step={1} />, document.getElementById("root"));
 ```
 
 produces a bundle with 4.3 KiB compared to 115 KiB with react and react-dom.
+
+## Contributors
+
+This project exists thanks to all the people who contribute. 
+<a href="https://github.com/sokra/rawact/graphs/contributors"><img src="https://opencollective.com/rawact/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/rawact#backer)]
+
+<a href="https://opencollective.com/rawact#backers" target="_blank"><img src="https://opencollective.com/rawact/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/rawact#sponsor)]
+
+<a href="https://opencollective.com/rawact/sponsor/0/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/1/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/2/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/3/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/4/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/5/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/6/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/7/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/8/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/rawact/sponsor/9/website" target="_blank"><img src="https://opencollective.com/rawact/sponsor/9/avatar.svg"></a>
+
+
