@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`classes pure components protect multiple re-renders 1`] = `
+<div>
+  <p>
+    Hi to 
+    world
+     x
+    1
+  </p>
+</div>
+`;
+
+exports[`classes pure components protect multiple re-renders 2`] = `
+<div>
+  <p>
+    Hi to 
+    world
+     x
+    1
+  </p>
+</div>
+`;
+
+exports[`classes renders correctly 1`] = `
+<div>
+  <p>
+    Hello 
+    world
+    !
+  </p>
+</div>
+`;
+
+exports[`classes unmounts when changing componnt 1`] = `
+<div>
+  <p>
+    Hello 
+    world
+    !
+  </p>
+</div>
+`;

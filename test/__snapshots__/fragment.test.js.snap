@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fragments rendering at the top adds new children 1`] = `
+<div>
+  Good
+  <b>
+    B
+  </b>
+  ye 
+  me
+  !
+  (and sorry)
+</div>
+`;
+
+exports[`fragments rendering at the top removes children 1`] = `
+<div>
+  Hello 
+  me
+  !
+</div>
+`;
+
+exports[`fragments rendering at the top removes non react children 1`] = `
+<div>
+  This
+  <span>
+    Rogue
+  </span>
+  Test
+</div>
+`;
+
+exports[`fragments rendering at the top renders correctly 1`] = `
+<div>
+  Hello 
+  world
+  !
+</div>
+`;
+
+exports[`fragments rendering at the top updates correctly 1`] = `
+<div>
+  Hello 
+  world
+  !
+</div>
+`;
+
+exports[`fragments rendering at the top updates correctly, changing a child 1`] = `
+<div>
+  Testing...
+  <span />
+</div>
+`;
+
+exports[`fragments rendering under an element adds new children 1`] = `
+<div>
+  <div>
+    Hello 
+    world
+    !
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element moves down 1`] = `
+<div>
+  Hello 
+  world
+  !
+</div>
+`;
+
+exports[`fragments rendering under an element moves up 1`] = `
+<div>
+  <div>
+    Hello 
+    world
+    !
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element removes children 1`] = `
+<div>
+  <div>
+    Good
+    <b>
+      B
+    </b>
+    ye 
+    world
+    !
+    (and sorry)
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element renders correctly 1`] = `
+<div>
+  <div>
+    Hello 
+    world
+    !
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element updates correctly 1`] = `
+<div>
+  <div>
+    Hello 
+    world
+    !
+  </div>
+</div>
+`;
+
+exports[`fragments rendering under an element updates correctly, changing a child 1`] = `
+<div>
+  <div>
+    Testing...
+    <span />
+  </div>
+</div>
+`;

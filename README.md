@@ -306,6 +306,7 @@ A base class is provided and uses hooks to implement the behavior of instance me
 - React.Component (PARTIAL)
   - componentDidMount
   - componentWillUnmount
+  - shouldComponentUpdate
   - componentDidUpdate
   - setState
   - this.props
@@ -322,6 +323,7 @@ A base class is provided and uses hooks to implement the behavior of instance me
 - React.createContext
 - useContext
 - ReactDOM.render
+- ReadtDOM.unmountComponentAtNode NOT IMPLEMENTED
 - dynamic props (PARTIAL: only input with some props)
   - code for all possible props is generated
   - unknown props (i. e. data-xx) is not implemented

@@ -1,11 +1,11 @@
-const toArray = x => {
+export const toArray = x => {
 	const array = [];
 	toArrayInternal(x, array);
 	return array;
 };
 
 const toArrayInternal = (x, array) => {
-	if (Array.isArray(x)) {
+	if (NodeList.prototype.isPrototypeOf(x) || Array.isArray(x)) {
 		for (const item of x) {
 			toArrayInternal(item, array);
 		}
