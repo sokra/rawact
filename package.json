@@ -12,7 +12,8 @@
     "test": "npm run prepublishOnly && npm run test-react && npm run test-rawact",
     "//": "--no-cache can be removed when jest 24 is released which includes BABEL_ENV in the cache key",
     "test-rawact": "cross-env BABEL_ENV=test-rawact jest --no-cache",
-    "test-react": "cross-env BABEL_ENV=test-react jest --no-cache"
+    "test-react": "cross-env BABEL_ENV=test-react jest --no-cache",
+    "postinstall": "opencollective-postinstall"
   },
   "jest": {
     "moduleNameMapper": {
@@ -24,7 +25,9 @@
   ],
   "dependencies": {
     "@babel/core": "^7.1.2",
-    "@babel/helper-plugin-utils": "^7.0.0"
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "opencollective-postinstall": "^2.0.1",
+    "opencollective": "^1.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -36,5 +39,9 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "rimraf": "^2.6.2"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/rawact"
   }
 }
