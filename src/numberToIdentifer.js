@@ -17,7 +17,7 @@ export default function numberToIdentifier(n) {
 
 	// use multiple letters
 	return (
-		numberToIdentifer(n % (2 * DELTA_A_TO_Z)) +
-		numberToIdentifer(Math.floor(n / (2 * DELTA_A_TO_Z)))
+		numberToIdentifier(n % (2 * DELTA_A_TO_Z)) +
+		numberToIdentifier(Math.floor(n / (2 * DELTA_A_TO_Z)))
 	);
 }

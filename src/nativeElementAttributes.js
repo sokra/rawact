@@ -152,7 +152,7 @@ export default (
 
 	switch (attribute) {
 		case "style": {
-			valueIsConst = valueIsConst || isEqualConstant(value);
+			valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
 			const setStyle = scope.importHelper("setStyle");
 			captureAndCheckedUpdate(local =>
 				t.expressionStatement(t.callExpression(setStyle, [node, local]))
