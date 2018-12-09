@@ -140,13 +140,15 @@ const createNativeElement = (element, scope) => {
 			);
 			props = new Map();
 			const attributes = attributesByElement[element.typeNode.value];
-			for (const key of attributes) {
-				if (key === "children") {
-					if (children.length === 0) {
-						children = [t.memberExpression(propsLocal, t.identifier(key))];
+			if (attributes) {
+				for (const key of attributes) {
+					if (key === "children") {
+						if (children.length === 0) {
+							children = [t.memberExpression(propsLocal, t.identifier(key))];
+						}
+					} else {
+						props.set(key, t.memberExpression(propsLocal, t.identifier(key)));
 					}
-				} else {
-					props.set(key, t.memberExpression(propsLocal, t.identifier(key)));
 				}
 			}
 		}
@@ -300,9 +302,10 @@ const createComponentInstructions = (element, helpers) => {
 	} else if (element.children.length === 1) {
 		props.push(t.objectProperty(t.identifier("children"), element.children[0]));
 	}
+	
 	let instructions = t.callExpression(helpers.importHelper("hooks"), [
 		element.typeNode,
-		t.objectExpression(props)
+		element.dynamicProps? element.dynamicProps: t.objectExpression(props)
 	]);
 	instructions = ensureKey(instructions, helpers, element.keyNode);
 	return instructions;

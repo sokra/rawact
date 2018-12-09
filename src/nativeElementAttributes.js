@@ -1,6 +1,11 @@
-import { types as t } from "@babel/core";
+import {
+	types as t
+} from "@babel/core";
 import isConstant from "./isConstant";
 import isEqualConstant from "./isEqualConstant";
+import {
+	svgElements
+} from "./svgElements";
 
 const checkChange = (scope, name, value, statement) => {
 	const slot = scope.createSlot("old_" + name);
@@ -77,33 +82,33 @@ export default (
 	const captureAndListenEvent = (event, createListener) => {
 		captureAndChecked3WayUpdate(
 			(local, store) =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("addEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						store(createListener(local))
-					])
-				),
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("addEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					store(createListener(local))
+				])
+			),
 			(old, local, store) =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("replaceEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						old,
-						store(createListener(local))
-					])
-				),
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("replaceEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					old,
+					store(createListener(local))
+				])
+			),
 			old =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("removeEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						old
-					])
-				)
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("removeEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					old
+				])
+			)
 		);
 	};
 
@@ -150,18 +155,36 @@ export default (
 		return;
 	}
 
-	switch (attribute) {
-		case "style": {
-			valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
-			const setStyle = scope.importHelper("setStyle");
-			captureAndCheckedUpdate(local =>
-				t.expressionStatement(t.callExpression(setStyle, [node, local]))
-			);
-			return;
+	if (attribute !== 'style' && svgElements[element]) {
+		valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
+		if (attribute === "className") {
+			attribute = "class"
 		}
-		case "value": {
-			captureAndPropertyCheckedUpdate(
-				local =>
+		if (attribute === "textAnchor") {
+			attribute = "text-anchor"
+		}
+		captureAndCheckedUpdate(local =>
+			t.expressionStatement(t.callExpression(t.memberExpression(node, t.identifier(
+				"setAttribute")), [t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' +
+				A.toLowerCase())), local]))
+		);
+		return;
+	}
+
+	switch (attribute) {
+		case "style":
+			{
+				valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
+				const setStyle = scope.importHelper("setStyle");
+				captureAndCheckedUpdate(local =>
+					t.expressionStatement(t.callExpression(setStyle, [node, local]))
+				);
+				return;
+			}
+		case "value":
+			{
+				captureAndPropertyCheckedUpdate(
+					local =>
 					t.expressionStatement(
 						t.assignmentExpression(
 							"=",
@@ -169,10 +192,10 @@ export default (
 							local
 						)
 					),
-				() => t.memberExpression(node, t.identifier(attribute))
-			);
-			return;
-		}
+					() => t.memberExpression(node, t.identifier(attribute))
+				);
+				return;
+			}
 		case "autoFocus":
 			attribute = "autofocus";
 			break;
