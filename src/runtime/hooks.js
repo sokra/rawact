@@ -53,7 +53,7 @@ export default (component, props) => {
 		currentRerender = rerender;
 		currentComponent = context;
 
-		const instructions = render(props, component);
+		const instructions = render.call(currentComponent, props, component);
 
 		if (context.i === instructions) return context.n;
 
