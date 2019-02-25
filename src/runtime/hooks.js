@@ -20,7 +20,8 @@ export function createScheduleRender() {
 	const rerender = currentRerender;
 	if (!rerender) throw new Error();
 	return () => {
-		Promise.resolve().then(rerender);
+		rerender()
+		// Promise.resolve().then(rerender);
 	};
 }
 
@@ -28,9 +29,9 @@ export const RenderSymbol = Symbol();
 
 export default (component, props) => {
 	const parent = currentComponent;
-	const renderMethod = component.prototype[RenderSymbol];
+	const renderMethod = component.prototype && component.prototype[RenderSymbol];
 	const render = renderMethod || component;
-	return (context, rerender) => {
+	const ret = (context, rerender) => {
 		if (context._ !== component) {
 			context.p = parent;
 			context.s = [];
@@ -43,7 +44,9 @@ export default (component, props) => {
 				if (context.x.$) context.x.$();
 			};
 			context._ = component;
-			context.x = { $$: context.$$ }; // child context
+			context.x = {
+				$$: context.$$
+			}; // child context
 			context.i = undefined; // instructions
 			context.n = undefined; // node
 		}
@@ -58,6 +61,13 @@ export default (component, props) => {
 		if (context.i === instructions) return context.n;
 
 		context.i = instructions;
+		if (typeof instructions !== 'function') {
+			debugger
+			// return
+		}
 		return (context.n = instructions(context.x, rerender));
 	};
+	component.ret = ret
+	ret.component = component
+	return ret
 };

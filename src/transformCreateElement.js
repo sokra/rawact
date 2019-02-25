@@ -150,7 +150,7 @@ const createNativeElement = (element, scope) => {
 						props.set(key, t.memberExpression(propsLocal, t.identifier(key)));
 					}
 				}
-			}
+			} 
 		}
 
 		for (const [key, value] of props) {

@@ -5,7 +5,7 @@ function Component(props) {
 	this.props = props;
 }
 
-Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
+Component.prototype[hooks.RenderSymbol] = function (newProps, Class) {
 	var [slots, index] = hooks.createSlot();
 	var slot = slots[index];
 	var instance;
@@ -18,6 +18,7 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 	if (!slot) {
 		stateChanges = [];
 		instance = new Class(newProps);
+		stateChanges.instance = instance
 		instance.props = newProps;
 		slot = slots[index] = {
 			i: instance,
@@ -27,6 +28,9 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 			r: undefined // rendering instructions
 		};
 		instance.setState = (newState, callback) => {
+			Class
+			instance
+			newProps
 			stateChanges.push([
 				typeof newState === "function" ? newState : () => newState,
 				callback

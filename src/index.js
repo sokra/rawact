@@ -1,5 +1,9 @@
-import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import {
+	declare
+} from "@babel/helper-plugin-utils";
+import {
+	types as t
+} from "@babel/core";
 import transformCreateElement from "./transformCreateElement";
 import cleverReplace from "./cleverReplace";
 
@@ -99,31 +103,43 @@ export default declare(api => {
 					path.remove();
 				}
 			},
+			VariableDeclaration(path) {
+				if (path.node.declarations.init &&
+					path.node.declarations.init.type === "CallExpression" &&
+					path.node.declarations.init.callee === "require"
+				) {
+					let value = path.node.declarations.init.arguments[0] && path.node.declarations
+						.init.arguments[0].value;
+					if (value !== "react" && value !== "react-dom") return;
+					path.replaceWith(_core.types.importDeclaration(path.node.declarations.id,
+						_core.types.stringLiteral("babel-plugin-rawact/lib/runtime/react")));
+				}
+			},
 			Program: {
 				exit(path) {
-					path.traverse(
-						{
+					path.traverse({
 							CallExpression(path) {
 								const callee = path.node.callee;
 								const type = this.getType(callee);
 								switch (type) {
-									case "createElement": {
-										cleverReplace(
-											path,
-											transformCreateElement(path.node, {
-												getType: this.getType.bind(this),
-												addGlobal: this.addGlobal.bind(this),
-												getUniqueIdentifier: this.getUniqueIdentifier.bind(
-													this
-												),
-												getUniqueNumber: this.getUniqueNumber.bind(this),
-												importHelper: this.importHelper.bind(this)
-											})
-										);
-										break;
-									}
+									case "createElement":
+										{
+											cleverReplace(
+												path,
+												transformCreateElement(path.node, {
+													getType: this.getType.bind(this),
+													addGlobal: this.addGlobal.bind(this),
+													getUniqueIdentifier: this.getUniqueIdentifier.bind(
+														this
+													),
+													getUniqueNumber: this.getUniqueNumber.bind(this),
+													importHelper: this.importHelper.bind(this)
+												})
+											);
+											break;
+										}
 								}
-							}
+							},
 						},
 						this
 					);

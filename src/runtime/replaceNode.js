@@ -18,7 +18,10 @@ export default (oldNodes, newNodes) => {
 	if (oldNodes === newNodes) return;
 	oldNodes = toArray(oldNodes);
 	newNodes = toArray(newNodes);
-	const parentNode = oldNodes[0].parentNode;
+	const parentNode = (oldNodes[0] && oldNodes[0].parentNode) || (newNodes[0] && newNodes[0].parentNode);
+	if (!parentNode) {
+		return
+	}
 	const nextOne = oldNodes[oldNodes.length - 1].nextSibling;
 	if (!nextOne && parentNode.firstChild === oldNodes[0]) {
 		// replaced whole parent: take shortcut to clear nodes here
@@ -30,15 +33,26 @@ export default (oldNodes, newNodes) => {
 		const oldSet = new Set(oldNodes);
 		for (let i = 0; i < newNodes.length; i++) {
 			const node = newNodes[i];
+			if (node === undefined) {
+				continue
+			}
 			oldSet.delete(node);
 			if (nextOne) {
-				parentNode.insertBefore(newNodes[i], nextOne);
+				try {
+					parentNode.insertBefore(newNodes[i], nextOne);
+				} catch (e) {
+					debugger
+				}
 			} else {
 				parentNode.appendChild(newNodes[i]);
 			}
 		}
 		for (const old of oldSet) {
-			parentNode.removeChild(old);
+			try {
+        parentNode.removeChild(old);
+      } catch (e) {
+        console.error(e)
+      }
 		}
 	}
 };

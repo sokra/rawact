@@ -38,6 +38,32 @@ export default (
 		}
 	};
 
+	const captureAndAttributeCheckedUpdate = (setter, unsetter) => {
+		if (valueIsConst) {
+			createStatements.push(t.expressionStatement(setter(value)));
+		} else {
+			const local = scope.createCapturedLocal(attribute, value);
+			const old = scope.createSlot("old_" + attribute);
+			const update = setter(t.assignmentExpression("=", old, local));
+			createStatements.push(t.ifStatement(t.binaryExpression("!==", local, t.identifier(
+				"undefined")), update));
+			updateStatements.push(
+				t.ifStatement(t.binaryExpression("!==", old, local),
+					t.blockStatement([
+						t.ExpressionStatement(
+							t.conditionalExpression(
+								t.binaryExpression("!==", local, t.identifier("undefined")),
+								update,
+								unsetter(),
+							)
+						),
+						t.assignmentExpression("=", old, local),
+					])
+				)
+			);
+		}
+	};
+
 	const captureAndPropertyCheckedUpdate = (setter, getter) => {
 		if (valueIsConst) {
 			createStatements.push(setter(value));
@@ -115,7 +141,7 @@ export default (
 	if (attribute === "ref") {
 		const local = scope.createCapturedLocal(attribute, value);
 		createStatements.push(
-			t.expressionStatement(t.callExpression(local, [node]))
+			t.ifStatement(local, t.expressionStatement(t.callExpression(local, [node])))
 		);
 		return;
 	}
@@ -160,13 +186,18 @@ export default (
 		if (attribute === "className") {
 			attribute = "class"
 		}
-		if (attribute === "textAnchor") {
-			attribute = "text-anchor"
-		}
-		captureAndCheckedUpdate(local =>
-			t.expressionStatement(t.callExpression(t.memberExpression(node, t.identifier(
-				"setAttribute")), [t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' +
-				A.toLowerCase())), local]))
+		captureAndAttributeCheckedUpdate(
+			local =>
+			t.callExpression(t.memberExpression(node, t.identifier(
+				"setAttribute")), [
+				t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' + A.toLowerCase())),
+				local
+			]),
+			() =>
+			t.callExpression(t.memberExpression(node, t.identifier(
+				"removeAttribute")), [
+				t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' + A.toLowerCase()))
+			])
 		);
 		return;
 	}
