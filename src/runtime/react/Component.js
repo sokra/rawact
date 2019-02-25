@@ -5,7 +5,7 @@ function Component(props) {
 	this.props = props;
 }
 
-Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
+Component.prototype[hooks.RenderSymbol] = function (newProps, Class) {
 	var [slots, index] = hooks.createSlot();
 	var slot = slots[index];
 	var instance;
@@ -18,6 +18,7 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 	if (!slot) {
 		stateChanges = [];
 		instance = new Class(newProps);
+		stateChanges.instance = instance
 		instance.props = newProps;
 		slot = slots[index] = {
 			i: instance,
@@ -26,10 +27,14 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 			f: false, // forceRender flag
 			r: undefined // rendering instructions
 		};
-		instance.setState = newState => {
-			stateChanges.push(
-				typeof newState === "function" ? newState : () => newState
-			);
+		instance.setState = (newState, callback) => {
+			Class
+			instance
+			newProps
+			stateChanges.push([
+				typeof newState === "function" ? newState : () => newState,
+				callback
+			]);
 			slot.u();
 		};
 		instance.forceUpdate = () => {
@@ -51,7 +56,10 @@ Component.prototype[hooks.RenderSymbol] = function(newProps, Class) {
 		stateChanges = slot.s;
 		newState = prevState;
 		for (i = 0; i < stateChanges.length; i++) {
-			newState = Object.assign({}, newState, stateChanges[i](newState));
+			newState = Object.assign({}, newState, stateChanges[i][0](newState));
+			if (typeof stateChanges[i][1] === 'function') {
+				stateChanges[i][1].call(instance);
+			}
 		}
 		stateChanges.length = 0;
 

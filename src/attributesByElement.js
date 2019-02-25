@@ -8,5 +8,6 @@ export default {
 		"onKeyUp",
 		"onKeyPress"
 	],
-	button: ["onClick", "children"]
+	button: ["onClick", "children"],
+	a: ["href", "onClick", "className"],
 };

@@ -1,6 +1,11 @@
-import { types as t } from "@babel/core";
+import {
+	types as t
+} from "@babel/core";
 import isConstant from "./isConstant";
 import isEqualConstant from "./isEqualConstant";
+import {
+	svgElements
+} from "./svgElements";
 
 const checkChange = (scope, name, value, statement) => {
 	const slot = scope.createSlot("old_" + name);
@@ -29,6 +34,32 @@ export default (
 			createStatements.push(update);
 			updateStatements.push(
 				t.ifStatement(t.binaryExpression("!==", old, local), update)
+			);
+		}
+	};
+
+	const captureAndAttributeCheckedUpdate = (setter, unsetter) => {
+		if (valueIsConst) {
+			createStatements.push(t.expressionStatement(setter(value)));
+		} else {
+			const local = scope.createCapturedLocal(attribute, value);
+			const old = scope.createSlot("old_" + attribute);
+			const update = setter(t.assignmentExpression("=", old, local));
+			createStatements.push(t.ifStatement(t.binaryExpression("!==", local, t.identifier(
+				"undefined")), update));
+			updateStatements.push(
+				t.ifStatement(t.binaryExpression("!==", old, local),
+					t.blockStatement([
+						t.ExpressionStatement(
+							t.conditionalExpression(
+								t.binaryExpression("!==", local, t.identifier("undefined")),
+								update,
+								unsetter(),
+							)
+						),
+						t.assignmentExpression("=", old, local),
+					])
+				)
 			);
 		}
 	};
@@ -77,40 +108,40 @@ export default (
 	const captureAndListenEvent = (event, createListener) => {
 		captureAndChecked3WayUpdate(
 			(local, store) =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("addEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						store(createListener(local))
-					])
-				),
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("addEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					store(createListener(local))
+				])
+			),
 			(old, local, store) =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("replaceEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						old,
-						store(createListener(local))
-					])
-				),
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("replaceEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					old,
+					store(createListener(local))
+				])
+			),
 			old =>
-				t.expressionStatement(
-					t.callExpression(scope.importHelper("removeEventListener"), [
-						scope.root(),
-						node,
-						t.stringLiteral(event),
-						old
-					])
-				)
+			t.expressionStatement(
+				t.callExpression(scope.importHelper("removeEventListener"), [
+					scope.root(),
+					node,
+					t.stringLiteral(event),
+					old
+				])
+			)
 		);
 	};
 
 	if (attribute === "ref") {
 		const local = scope.createCapturedLocal(attribute, value);
 		createStatements.push(
-			t.expressionStatement(t.callExpression(local, [node]))
+			t.ifStatement(local, t.expressionStatement(t.callExpression(local, [node])))
 		);
 		return;
 	}
@@ -150,18 +181,41 @@ export default (
 		return;
 	}
 
-	switch (attribute) {
-		case "style": {
-			valueIsConst = valueIsConst || isEqualConstant(value);
-			const setStyle = scope.importHelper("setStyle");
-			captureAndCheckedUpdate(local =>
-				t.expressionStatement(t.callExpression(setStyle, [node, local]))
-			);
-			return;
+	if (attribute !== 'style' && svgElements[element]) {
+		valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
+		if (attribute === "className") {
+			attribute = "class"
 		}
-		case "value": {
-			captureAndPropertyCheckedUpdate(
-				local =>
+		captureAndAttributeCheckedUpdate(
+			local =>
+			t.callExpression(t.memberExpression(node, t.identifier(
+				"setAttribute")), [
+				t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' + A.toLowerCase())),
+				local
+			]),
+			() =>
+			t.callExpression(t.memberExpression(node, t.identifier(
+				"removeAttribute")), [
+				t.stringLiteral(attribute.replace(/[A-Z]/g, A => '-' + A.toLowerCase()))
+			])
+		);
+		return;
+	}
+
+	switch (attribute) {
+		case "style":
+			{
+				valueIsConst = valueIsConst || isEqualConstant(value, scope.helpers);
+				const setStyle = scope.importHelper("setStyle");
+				captureAndCheckedUpdate(local =>
+					t.expressionStatement(t.callExpression(setStyle, [node, local]))
+				);
+				return;
+			}
+		case "value":
+			{
+				captureAndPropertyCheckedUpdate(
+					local =>
 					t.expressionStatement(
 						t.assignmentExpression(
 							"=",
@@ -169,10 +223,10 @@ export default (
 							local
 						)
 					),
-				() => t.memberExpression(node, t.identifier(attribute))
-			);
-			return;
-		}
+					() => t.memberExpression(node, t.identifier(attribute))
+				);
+				return;
+			}
 		case "autoFocus":
 			attribute = "autofocus";
 			break;

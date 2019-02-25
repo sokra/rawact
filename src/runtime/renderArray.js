@@ -32,7 +32,7 @@ export default (context, array) => {
 	const fragment = context.fragment;
 	const keys = new Set();
 	const nodeMap = new Map();
-	const keysArray = array.map(item => {
+	const keysArray = array.filter(d => d != null).map(item => {
 		const key = item[KeySymbol];
 		keys.add(key);
 		return key;
@@ -54,13 +54,17 @@ export default (context, array) => {
 			if (unusedIndex < unused.length) {
 				childContext = unused[unusedIndex++];
 			} else {
-				childContext = { $$ };
+				childContext = {
+					$$
+				};
 			}
 			ctxsNonKey.push(childContext);
 		} else {
 			childContext = ctxs.get(key);
 			if (childContext === undefined) {
-				childContext = { $$ };
+				childContext = {
+					$$
+				};
 				ctxs.set(key, childContext);
 			}
 		}
@@ -141,7 +145,11 @@ export default (context, array) => {
 
 		if (currentNodeTarget === undefined) {
 			// This node is no longer needed and can be removed
-			if (parentNode) parentNode.removeChild(currentNode);
+			try {
+				if (parentNode) parentNode.removeChild(currentNode);
+			} catch (e) {
+				console.error(e)
+			}
 			fragment.splice(i, 1);
 			offset--;
 			continue;
@@ -162,7 +170,11 @@ export default (context, array) => {
 			// The source is nearer:
 			// remove the current node
 			// to be later inserted again
-			if (parentNode) parentNode.removeChild(currentNode);
+			try {
+				if (parentNode) parentNode.removeChild(currentNode);
+			} catch (e) {
+				console.error(e)
+			}
 			fragment.splice(i, 1);
 			offset--;
 		} else {
